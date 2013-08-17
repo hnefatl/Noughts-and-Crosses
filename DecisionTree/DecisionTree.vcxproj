@@ -56,6 +56,7 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>..\Lib\</OutDir>
     <ReferencePath>$(VCInstallDir)atlmfc\lib;$(VCInstallDir)lib\</ReferencePath>
+    <IncludePath>E:\Programming\C++\AI\XO\Globals;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>

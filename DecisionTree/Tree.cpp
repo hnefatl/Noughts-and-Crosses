@@ -10,10 +10,10 @@ Tree::Tree()
 void Tree::Initialise()
 {
 	Root=new Node();
-	GenerateTree(Root, FirstPlayer);
+	GenerateTree(Root, (CellContents)FirstPlayer);
 }
 
-int Tree::GenerateTree(Node *Current, CellContents CurrentPlayer)
+int Tree::GenerateTree(Node *Current, CellContents CurrentPlayer, CellContents AIPlayer)
 {
 	// Increase the NodeCount, as this is a new node to be processed
 	NodeCount++;
@@ -49,7 +49,7 @@ int Tree::GenerateTree(Node *Current, CellContents CurrentPlayer)
 
 	// Generate this Node's score
 	// If the AI will choose the move
-	if(AIPlayer==CurrentPlayer)
+	if(CurrentPlayer==AIPlayer)
 	{
 		// If this node is a goal state for the AI
 		if(Current->State.IsGoalState(CurrentPlayer))

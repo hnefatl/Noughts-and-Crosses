@@ -8,9 +8,9 @@ class Tree
 public:
 	Tree();
 
-	void Initialise();
+	void Initialise(CellContents AIPlayer);
 
-	int GenerateTree(Node *Current, CellContents CurrentPlayer);
+	int GenerateTree(Node *Current, CellContents CurrentPlayer, CellContents AIPlayer);
 
 	unsigned int GetNodeCount();
 
