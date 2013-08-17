@@ -1,15 +1,19 @@
-#ifndef _OPTIONS_H
-#define _OPTIONS_H
+#ifndef OPTIONS_H
+#define OPTIONS_H
 
-#include <Windows.h>
+#include <QtWidgets/QWidget>
+#include "ui_options.h"
 
-class Options
+class Options : public QWidget
 {
+	Q_OBJECT
+
 public:
-	Options();
+	Options(QWidget *parent = 0);
+	~Options();
 
 private:
-
+	Ui::OptionsClass ui;
 };
 
-#endif
+#endif // OPTIONS_H
