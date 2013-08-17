@@ -1,25 +1,132 @@
-<UI version="4.0" >
- <class>OptionsClass</class>
- <widget class="QWidget" name="OptionsClass" >
-  <property name="objectName" >
-   <string notr="true">OptionsClass</string>
-  </property>
-  <property name="geometry" >
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>Dialog_Options</class>
+ <widget class="QWidget" name="Dialog_Options">
+  <property name="geometry">
    <rect>
-	<x>0</x>
-	<y>0</y>
-	<width>600</width>
-	<height>400</height>
+    <x>0</x>
+    <y>0</y>
+    <width>300</width>
+    <height>150</height>
    </rect>
   </property>
-  <property name="windowTitle" >
+  <property name="windowTitle">
    <string>Options</string>
   </property>
+  <widget class="QGroupBox" name="Box_PlayerType">
+   <property name="geometry">
+    <rect>
+     <x>10</x>
+     <y>10</y>
+     <width>120</width>
+     <height>91</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Player Type</string>
+   </property>
+   <widget class="QRadioButton" name="Radio_PlayerType_Human">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>82</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Human</string>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="Radio_PlayerType_AI">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>82</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>AI</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QGroupBox" name="Box_OpponentType">
+   <property name="geometry">
+    <rect>
+     <x>150</x>
+     <y>10</y>
+     <width>120</width>
+     <height>91</height>
+    </rect>
+   </property>
+   <property name="title">
+    <string>Opponent Type</string>
+   </property>
+   <widget class="QRadioButton" name="Radio_OpponentType_Human">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>20</y>
+      <width>82</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Human</string>
+    </property>
+    <property name="checked">
+     <bool>true</bool>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="Radio_OpponentType_AI">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>40</y>
+      <width>82</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>AI</string>
+    </property>
+   </widget>
+   <widget class="QRadioButton" name="Radio_OpponentType_Online">
+    <property name="geometry">
+     <rect>
+      <x>10</x>
+      <y>60</y>
+      <width>82</width>
+      <height>17</height>
+     </rect>
+    </property>
+    <property name="text">
+     <string>Online</string>
+    </property>
+   </widget>
+  </widget>
+  <widget class="QPushButton" name="Button_Start">
+   <property name="geometry">
+    <rect>
+     <x>125</x>
+     <y>110</y>
+     <width>50</width>
+     <height>23</height>
+    </rect>
+   </property>
+   <property name="text">
+    <string>Start</string>
+   </property>
+  </widget>
  </widget>
- <layoutDefault spacing="6" margin="11" />
- <pixmapfunction></pixmapfunction>
+ <layoutdefault spacing="6" margin="11"/>
  <resources>
-   <include location="UI.qrc"/>
+  <include location="UI.qrc"/>
  </resources>
  <connections/>
-</UI>
+</ui>

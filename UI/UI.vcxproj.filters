@@ -61,9 +61,15 @@
     <CustomBuild Include="UI.qrc">
       <Filter>Resource Files</Filter>
     </CustomBuild>
+    <CustomBuild Include="NetworkSettings.ui">
+      <Filter>Form Files</Filter>
+    </CustomBuild>
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="GeneratedFiles\ui_options.h">
+      <Filter>Generated Files</Filter>
+    </ClInclude>
+    <ClInclude Include="GeneratedFiles\ui_NetworkSettings.h">
       <Filter>Generated Files</Filter>
     </ClInclude>
   </ItemGroup>
