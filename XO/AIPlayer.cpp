@@ -18,7 +18,7 @@ AIPlayer::~AIPlayer()
 std::string AIPlayer::Initialise()
 {
 	// Seed the random generator
-	srand(time(NULL));
+	srand((unsigned int)time(NULL));
 
 	// Return no error
 	return "";
