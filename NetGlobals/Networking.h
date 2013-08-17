@@ -1,7 +1,6 @@
 #ifndef _NETWORKING_H
 #define _NETWORKING_H
 
-#include <WS2tcpip.h>
 #include <Windows.h>
 #include <winsock.h>
 
