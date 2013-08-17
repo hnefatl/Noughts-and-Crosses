@@ -7,10 +7,10 @@ Tree::Tree()
 {
 }
 
-void Tree::Initialise()
+void Tree::Initialise(CellContents AIPlayer)
 {
 	Root=new Node();
-	GenerateTree(Root, (CellContents)FirstPlayer);
+	GenerateTree(Root, (CellContents)FirstPlayer, AIPlayer);
 }
 
 int Tree::GenerateTree(Node *Current, CellContents CurrentPlayer, CellContents AIPlayer)
@@ -41,7 +41,7 @@ int Tree::GenerateTree(Node *Current, CellContents CurrentPlayer, CellContents A
 					// Store as child
 					Current->AddChild(Child);
 					// Generate its tree, swapping the player
-					Current->Score+=GenerateTree(Child, CurrentPlayer==CellContents::Cross?CellContents::Nought:CellContents::Cross);
+					Current->Score+=GenerateTree(Child, CurrentPlayer==CellContents::Cross?CellContents::Nought:CellContents::Cross, AIPlayer);
 				}
 			}
 		}

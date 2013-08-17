@@ -1,9 +1,8 @@
-#include <QtWidgets/QApplication>
-#include "GeneratedFiles/ui_Options.h"
+#include <iostream>
 
 int main(int argc, char *argv[])
 {
-	QApplication a(argc, argv);
-	
-	return a.exec();
+
+
+	return 0;
 }
