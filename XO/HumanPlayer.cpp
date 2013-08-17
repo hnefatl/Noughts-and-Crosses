@@ -23,9 +23,9 @@ std::string HumanPlayer::GetMove(Move *ChosenMove)
 	return ""; // Return no error
 }
 
-std::string HumanPlayer::InformMove(Move *ChosenMove)
+std::string HumanPlayer::InformMove(Grid *NewState)
 {
-
+	
 
 	return ""; // Return no error
 }

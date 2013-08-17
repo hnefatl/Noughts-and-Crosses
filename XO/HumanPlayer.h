@@ -14,7 +14,7 @@ public:
 
 	std::string GetMove(Move *ChosenMove);
 
-	std::string InformMove(Move *ChosenMove);
+	std::string InformMove(Grid *NewState);
 
 private:
 	
