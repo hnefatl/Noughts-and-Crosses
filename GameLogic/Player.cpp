@@ -7,5 +7,5 @@ Player::Player()
 
 Player::~Player()
 {
-	Board=NULL;
+
 }

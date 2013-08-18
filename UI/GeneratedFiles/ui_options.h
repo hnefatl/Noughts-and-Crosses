@@ -66,6 +66,7 @@ public:
         Button_Start->setGeometry(QRect(125, 110, 50, 23));
 
         retranslateUi(Dialog_Options);
+        QObject::connect(Button_Start, SIGNAL(clicked()), Dialog_Options, SLOT(close()));
 
         QMetaObject::connectSlotsByName(Dialog_Options);
     } // setupUi

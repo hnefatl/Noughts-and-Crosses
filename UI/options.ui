@@ -128,5 +128,22 @@
  <resources>
   <include location="UI.qrc"/>
  </resources>
- <connections/>
+ <connections>
+  <connection>
+   <sender>Button_Start</sender>
+   <signal>clicked()</signal>
+   <receiver>Dialog_Options</receiver>
+   <slot>close()</slot>
+   <hints>
+    <hint type="sourcelabel">
+     <x>149</x>
+     <y>121</y>
+    </hint>
+    <hint type="destinationlabel">
+     <x>149</x>
+     <y>74</y>
+    </hint>
+   </hints>
+  </connection>
+ </connections>
 </ui>
