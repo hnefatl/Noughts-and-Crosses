@@ -4,6 +4,8 @@
 #include "Client.h"
 #include <vector>
 
+#include "Grid.h"
+
 class Game
 {
 public:
