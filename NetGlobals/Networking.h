@@ -6,10 +6,12 @@
 
 #include <string>
 
-bool Send(SOCKET Target, std::string Message);
-bool SendPlain(SOCKET Target, std::string Message);
+namespace Net
+{
+	bool Send(SOCKET Target, std::string Message);
+	bool SendPlain(SOCKET Target, std::string Message);
 
-bool Receive(SOCKET Target, std::string *Buffer);
-bool ReceivePlain(SOCKET Target, std::string *Buffer, unsigned int Length);
-
+	bool Receive(SOCKET Target, std::string *Buffer);
+	bool ReceivePlain(SOCKET Target, std::string *Buffer, unsigned int Length);
+};
 #endif

@@ -11,9 +11,13 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="Client.h" />
+    <ClInclude Include="Game.h" />
     <ClInclude Include="Server.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="Client.cpp" />
+    <ClCompile Include="Game.cpp" />
     <ClCompile Include="Server.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
@@ -49,11 +53,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LibraryPath>E:\Programming\C++\AI\XO\Lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>E:\Programming\C++\AI\XO\NetGlobals;$(IncludePath)</IncludePath>
+    <IncludePath>E:\Programming\C++\AI\XO\Globals;E:\Programming\C++\AI\XO\NetGlobals;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LibraryPath>E:\Programming\C++\AI\XO\Lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>E:\Programming\C++\AI\XO\NetGlobals;$(IncludePath)</IncludePath>
+    <IncludePath>E:\Programming\C++\AI\XO\Globals;E:\Programming\C++\AI\XO\NetGlobals;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -69,7 +73,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>Ws2_32.lib;NetGlobals.lib</AdditionalDependencies>
+      <AdditionalDependencies>Ws2_32.lib;NetGlobals.lib;Globals.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -90,7 +94,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>Ws2_32.lib;NetGlobals.lib</AdditionalDependencies>
+      <AdditionalDependencies>Ws2_32.lib;NetGlobals.lib;Globals.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

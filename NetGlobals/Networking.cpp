@@ -2,7 +2,7 @@
 
 #include <sstream>
 
-bool Send(SOCKET Target, std::string Message)
+bool Net::Send(SOCKET Target, std::string Message)
 {
 	std::stringstream Converter; // StringStream used to convert ints to strings
 	std::string MessageSize; // The length of the message, as a string
@@ -37,7 +37,7 @@ bool Send(SOCKET Target, std::string Message)
 	// Nothing went wrong
 	return true;
 }
-bool SendPlain(SOCKET Target, std::string Message)
+bool Net::SendPlain(SOCKET Target, std::string Message)
 {
 	unsigned int BytesSent=0; // Variable to hold the total number of bytes sent
 	// While there is more data to send
@@ -57,7 +57,7 @@ bool SendPlain(SOCKET Target, std::string Message)
 	return true;
 }
 
-bool Receive(SOCKET Target, std::string *Buffer)
+bool Net::Receive(SOCKET Target, std::string *Buffer)
 {
 	std::stringstream Converter; // Variable used to convert strings to ints
 	unsigned int MessageSizeSize; // Variable used to store the length of the string representation fo the legnth of the message
@@ -98,7 +98,7 @@ bool Receive(SOCKET Target, std::string *Buffer)
 
 	return true;
 }
-bool ReceivePlain(SOCKET Target, std::string *Buffer, unsigned int Length)
+bool Net::ReceivePlain(SOCKET Target, std::string *Buffer, unsigned int Length)
 {
 	std::stringstream Message; // Variable to hold the received message in
 	unsigned int BytesReceived=0; // Number of bytes received so far

@@ -18,9 +18,15 @@
     <ClInclude Include="Networking.h">
       <Filter>Header Files</Filter>
     </ClInclude>
+    <ClInclude Include="NetStrings.h">
+      <Filter>Header Files</Filter>
+    </ClInclude>
   </ItemGroup>
   <ItemGroup>
     <ClCompile Include="Networking.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NetStrings.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>

@@ -11,9 +11,11 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
+    <ClInclude Include="NetStrings.h" />
     <ClInclude Include="Networking.h" />
   </ItemGroup>
   <ItemGroup>
+    <ClCompile Include="NetStrings.cpp" />
     <ClCompile Include="Networking.cpp" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
