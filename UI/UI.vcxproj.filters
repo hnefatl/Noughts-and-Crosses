@@ -62,6 +62,12 @@
     <ClCompile Include="GeneratedFiles\Release\moc_Form_XO.cpp">
       <Filter>Generated Files\Release</Filter>
     </ClCompile>
+    <ClCompile Include="Form_XO.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
+    <ClCompile Include="NetworkSettings.cpp">
+      <Filter>Source Files</Filter>
+    </ClCompile>
   </ItemGroup>
   <ItemGroup>
     <CustomBuild Include="UI.qrc">
@@ -79,14 +85,14 @@
     <CustomBuild Include="NetworkSettings.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
-    <CustomBuild Include="MainWindow.ui">
-      <Filter>Form Files</Filter>
-    </CustomBuild>
     <CustomBuild Include="Form_XO.h">
       <Filter>Header Files</Filter>
     </CustomBuild>
     <CustomBuild Include="GeneratedFiles\ui_Form_XO.h">
       <Filter>Generated Files</Filter>
+    </CustomBuild>
+    <CustomBuild Include="Form_XO.ui">
+      <Filter>Form Files</Filter>
     </CustomBuild>
   </ItemGroup>
   <ItemGroup>

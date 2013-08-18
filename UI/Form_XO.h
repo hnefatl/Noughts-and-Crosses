@@ -3,20 +3,23 @@
 
 #include <QtWidgets\qwidget>
 #include "GeneratedFiles\ui_Form_XO.h"
-#include "GeneratedFiles\ui_Options.h"
-#include "GeneratedFiles\ui_NetworkSettings.h"
+#include "Options.h"
+#include "NetworkSettings.h"
 
-class MainWindow : public QMainWindow
+class Form_XO : public QMainWindow
 {
 	Q_OBJECT
 
 public:
-	MainWindow();
+	Form_XO(QWidget *Parent=NULL);
+
+public slots:
+	void ShowOptions();
 
 private:
 	Ui::Form_XO XO;
-	Ui::Dialog_Options Options;
-	Ui::Dialog_NetworkSettings NetworkSettings;
+	Options OptionsDialog;
+	NetworkSettings NetworkSettingsDialog;
 };
 
 #endif

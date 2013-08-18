@@ -12,6 +12,8 @@ public:
 	Options(QWidget *parent = 0);
 	~Options();
 
+	void show();
+
 private:
 	Ui::Dialog_Options ui;
 };

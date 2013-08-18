@@ -10,7 +10,6 @@ class NetworkSettings : public QWidget
 
 public:
 	NetworkSettings(QWidget *Parent=NULL);
-	~NetworkSettings();
 
 private:
 	Ui::Dialog_NetworkSettings ui;
