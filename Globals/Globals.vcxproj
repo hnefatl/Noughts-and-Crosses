@@ -72,11 +72,12 @@
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="Globals.cpp" />
-    <ClCompile Include="LockableObject.cpp" />
+    <ClCompile Include="Util.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="Globals.h" />
     <ClInclude Include="LockableObject.h" />
+    <ClInclude Include="Util.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
   <ImportGroup Label="ExtensionTargets">

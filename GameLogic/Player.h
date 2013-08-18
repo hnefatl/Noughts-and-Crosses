@@ -14,8 +14,6 @@ public:
 	virtual std::string Initialise()=0;
 	virtual std::string GetMove(Move *ChosenMove)=0;
 	virtual std::string InformMove(Grid *NewState)=0;
-
-	Grid *Board;
 };
 
 #endif

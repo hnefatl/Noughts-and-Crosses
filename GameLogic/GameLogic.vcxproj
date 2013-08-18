@@ -41,12 +41,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>E:\Programming\C++\AI\XO\GameData;E:\Programming\C++\AI\XO\UI;E:\Programming\C++\AI\XO\Globals;E:\Programming\C++\AI\XO\DecisionTree;$(IncludePath)</IncludePath>
-    <LibraryPath>E:\Programming\C++\Qt\Qt5.1.0\5.1.0\lib;E:\Programming\C++\AI\XO\Lib;$(LibraryPath)</LibraryPath>
+    <IncludePath>E:\Programming\C++\AI\XO\Client;E:\Programming\C++\AI\XO\GameData;E:\Programming\C++\AI\XO\UI;E:\Programming\C++\AI\XO\Globals;E:\Programming\C++\AI\XO\DecisionTree;$(IncludePath)</IncludePath>
+    <LibraryPath>E:\Programming\C++\AI\XO\Lib;$(LibraryPath)</LibraryPath>
     <OutDir>../Lib/</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>E:\Programming\C++\AI\XO\GameData;E:\Programming\C++\AI\XO\UI;E:\Programming\C++\AI\XO\Globals;E:\Programming\C++\AI\XO\DecisionTree;$(IncludePath)</IncludePath>
+    <IncludePath>E:\Programming\C++\AI\XO\Client;E:\Programming\C++\AI\XO\GameData;E:\Programming\C++\AI\XO\UI;E:\Programming\C++\AI\XO\Globals;E:\Programming\C++\AI\XO\DecisionTree;$(IncludePath)</IncludePath>
     <LibraryPath>E:\Programming\C++\AI\XO\Lib;$(LibraryPath)</LibraryPath>
     <OutDir>../Lib/</OutDir>
   </PropertyGroup>
@@ -61,7 +61,7 @@
       <AdditionalDependencies>DecisionTree.lib;UI.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib>
-      <AdditionalDependencies>GameData.lib;Globals.lib</AdditionalDependencies>
+      <AdditionalDependencies>GameData.lib;Globals.lib;Client.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -79,17 +79,19 @@
       <AdditionalDependencies>DecisionTree.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
     <Lib>
-      <AdditionalDependencies>GameData.lib;Globals.lib</AdditionalDependencies>
+      <AdditionalDependencies>GameData.lib;Globals.lib;Client.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemGroup>
     <ClCompile Include="AIPlayer.cpp" />
     <ClCompile Include="HumanPlayer.cpp" />
+    <ClCompile Include="OnlinePlayer.cpp" />
     <ClCompile Include="Player.cpp" />
   </ItemGroup>
   <ItemGroup>
     <ClInclude Include="AIPlayer.h" />
     <ClInclude Include="HumanPlayer.h" />
+    <ClInclude Include="OnlinePlayer.h" />
     <ClInclude Include="Player.h" />
   </ItemGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
