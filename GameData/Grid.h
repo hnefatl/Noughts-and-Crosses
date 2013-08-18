@@ -4,6 +4,7 @@
 #include "Cell.h"
 
 #include <vector>
+#include <string>
 
 class Grid
 {
@@ -15,6 +16,9 @@ public:
 	bool IsGoalState(CellContents CurrentPlayer);
 
 	void CalculateGoalStates();
+
+	static bool Parse(std::string *Board, Grid *Buffer);
+	static bool GetString(Grid *Board, std::string *Buffer);
 
 	void operator= (const Grid &One);
 	bool operator== (const Grid &One) const;

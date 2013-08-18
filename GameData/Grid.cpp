@@ -95,6 +95,39 @@ void Grid::CalculateGoalStates()
 	}
 }
 
+bool Grid::Parse(std::string *Board, Grid *Buffer)
+{
+	if(GridSize*GridSize!=Board->size())
+	{
+		// Invalid length
+		return false;
+	}
+
+	for(unsigned int y=0; y<GridSize; y++)
+	{
+		for(unsigned int x=0; x<GridSize; x++)
+		{
+			// Convert the character at the specified position to a CellContents, and set it
+			Buffer->Board[y][x].Set((CellContents)((*Board)[(y*GridSize)+x]));
+		}
+	}
+
+	return true;
+}
+bool Grid::GetString(Grid *Board, std::string *Buffer)
+{
+	Buffer->clear();
+	for(unsigned int y=0; y<GridSize; y++)
+	{
+		for(unsigned int x=0; x<GridSize; x++)
+		{
+			(*Buffer)+=((char)(Board->Board[y][x].Get()));
+		}
+	}
+
+	return true;
+}
+
 void Grid::operator= (const Grid &One)
 {
 	this->Board=One.Board;

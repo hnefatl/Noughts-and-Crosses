@@ -52,11 +52,11 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>..\Lib\</OutDir>
     <ReferencePath>$(VCInstallDir)atlmfc\lib;$(VCInstallDir)lib\</ReferencePath>
-    <IncludePath>E:\Programming\C++\AI\XO\Globals;$(IncludePath)</IncludePath>
+    <IncludePath>E:\Programming\C++\AI\XO\GameData;E:\Programming\C++\AI\XO\Globals;$(IncludePath)</IncludePath>
     <LibraryPath>E:\Programming\C++\AI\XO\Lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>E:\Programming\C++\AI\XO\Globals;$(IncludePath)</IncludePath>
+    <IncludePath>E:\Programming\C++\AI\XO\GameData;E:\Programming\C++\AI\XO\Globals;$(IncludePath)</IncludePath>
     <LibraryPath>E:\Programming\C++\AI\XO\Lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -73,7 +73,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>Globals.lib</AdditionalDependencies>
+      <AdditionalDependencies>Globals.lib;GameData.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -94,7 +94,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>Globals.lib</AdditionalDependencies>
+      <AdditionalDependencies>Globals.lib;GameData.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />

@@ -1,6 +1,7 @@
 #ifndef _CLIENT_H
 #define _CLIENT_H
 
+#include <WS2tcpip.h>
 #include <Windows.h>
 #include <winsock.h>
 #include <string>
@@ -16,6 +17,7 @@ public:
 	Client();
 	Client(SOCKET Socket);
 	Client(SOCKET Socket, std::string Username);
+	~Client();
 
 	void Start();
 

@@ -22,6 +22,10 @@ Client::Client(SOCKET Socket, std::string Username)
 {
 
 }
+Client::~Client()
+{
+	closesocket(Socket);
+}
 
 void Client::Start()
 {

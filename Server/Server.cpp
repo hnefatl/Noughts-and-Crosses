@@ -36,7 +36,27 @@ bool Server::Start(std::string IP, std::string Port, unsigned int Backlog)
 		// If there are 2 or more players
 		if(Clients.size()>=2)
 		{
+			// Create the players
+			Client *PlayerOne=Clients[0];
+			Client *PlayerTwo=Clients[1];
+			// Create the game
+			Game *NewGame=new Game(PlayerOne, PlayerTwo);
+			// Store the game
+			Games.push_back(NewGame);
+			// Remove the clients
+			Clients.erase(Clients.begin(), Clients.begin()+1);
+			// Start the game
+			NewGame->Play();
 
+			// Cull all dead games
+			for(unsigned int x=0; x<Games.size(); x++)
+			{
+				// Finished playing
+				if(!Games[x]->IsPlaying())
+				{
+					Games.erase(Games.begin()+x);
+				}
+			}
 		}
 	}
 

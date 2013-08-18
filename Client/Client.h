@@ -14,10 +14,12 @@ public:
 
 	bool Connect(std::string IP, std::string Port);
 
-
+	bool Send(std::string Message);
+	bool Receive(std::string *Buffer);
 
 private:
-
+	SOCKET Socket;
+	SOCKET ServerSocket;
 };
 
 #endif

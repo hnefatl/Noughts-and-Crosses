@@ -11,17 +11,17 @@
     </ProjectConfiguration>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\DecisionTree\Cell.h" />
-    <ClInclude Include="..\DecisionTree\CellContents.h" />
-    <ClInclude Include="..\DecisionTree\Grid.h" />
-    <ClInclude Include="..\XO\Move.h" />
-    <ClInclude Include="..\XO\Vector.h" />
+    <ClCompile Include="Cell.cpp" />
+    <ClCompile Include="Grid.cpp" />
+    <ClCompile Include="Move.cpp" />
+    <ClCompile Include="Vector.cpp" />
   </ItemGroup>
   <ItemGroup>
-    <ClCompile Include="..\DecisionTree\Cell.cpp" />
-    <ClCompile Include="..\DecisionTree\Grid.cpp" />
-    <ClCompile Include="..\XO\Move.cpp" />
-    <ClCompile Include="..\XO\Vector.cpp" />
+    <ClInclude Include="Cell.h" />
+    <ClInclude Include="CellContents.h" />
+    <ClInclude Include="Grid.h" />
+    <ClInclude Include="Move.h" />
+    <ClInclude Include="Vector.h" />
   </ItemGroup>
   <PropertyGroup Label="Globals">
     <ProjectGuid>{24D44F6F-DA0B-4B03-AE28-0A813012E62D}</ProjectGuid>
