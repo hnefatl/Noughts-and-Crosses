@@ -53,11 +53,11 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LibraryPath>E:\Programming\C++\AI\XO\Lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>E:\Programming\C++\AI\XO\Globals;E:\Programming\C++\AI\XO\NetGlobals;$(IncludePath)</IncludePath>
+    <IncludePath>E:\Programming\C++\AI\XO\GameData;E:\Programming\C++\AI\XO\Globals;E:\Programming\C++\AI\XO\NetGlobals;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LibraryPath>E:\Programming\C++\AI\XO\Lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>E:\Programming\C++\AI\XO\Globals;E:\Programming\C++\AI\XO\NetGlobals;$(IncludePath)</IncludePath>
+    <IncludePath>E:\Programming\C++\AI\XO\GameData;E:\Programming\C++\AI\XO\Globals;E:\Programming\C++\AI\XO\NetGlobals;$(IncludePath)</IncludePath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
@@ -73,7 +73,7 @@
       <GenerateDebugInformation>true</GenerateDebugInformation>
     </Link>
     <Lib>
-      <AdditionalDependencies>Ws2_32.lib;NetGlobals.lib;Globals.lib</AdditionalDependencies>
+      <AdditionalDependencies>Ws2_32.lib;NetGlobals.lib;Globals.lib;GameData.lib;GameData.lib</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
@@ -94,7 +94,7 @@
       <OptimizeReferences>true</OptimizeReferences>
     </Link>
     <Lib>
-      <AdditionalDependencies>Ws2_32.lib;NetGlobals.lib;Globals.lib</AdditionalDependencies>
+      <AdditionalDependencies>Ws2_32.lib;NetGlobals.lib;Globals.lib;GameData.lib;</AdditionalDependencies>
     </Lib>
   </ItemDefinitionGroup>
   <Import Project="$(VCTargetsPath)\Microsoft.Cpp.targets" />
