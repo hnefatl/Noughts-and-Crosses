@@ -25,7 +25,7 @@ void Game::Play()
 	Sending the move to both clients fulfils the InformMove condition of the players
 	*/
 
-	
+
 }
 
 bool Game::IsPlaying()
