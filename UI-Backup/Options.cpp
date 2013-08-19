@@ -3,7 +3,7 @@
 Options::Options(QWidget *parent)
 	: QWidget(parent)
 {
-	ui.setupUi(this);
+
 }
 
 Options::~Options()
@@ -13,6 +13,8 @@ Options::~Options()
 
 void Options::show()
 {
-	ui.setupUi(parentWidget());
+	QWidget *Widget=new QWidget();
+	ui.setupUi(Widget);
+	Widget->show();
 	QWidget::show();
 }

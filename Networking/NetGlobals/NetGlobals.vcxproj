@@ -50,12 +50,12 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <OutDir>..\Lib\</OutDir>
+    <OutDir>..\..\Lib\</OutDir>
     <IncludePath>E:\Programming\C++\AI\XO\Globals;$(IncludePath)</IncludePath>
     <LibraryPath>E:\Programming\C++\AI\XO\Lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <OutDir>..\Lib</OutDir>
+    <OutDir>..\..\Lib\</OutDir>
     <IncludePath>E:\Programming\C++\AI\XO\Globals;$(IncludePath)</IncludePath>
     <LibraryPath>E:\Programming\C++\AI\XO\Lib;$(LibraryPath)</LibraryPath>
   </PropertyGroup>

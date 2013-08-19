@@ -49,13 +49,13 @@
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <LibraryPath>E:\Programming\C++\AI\XO\Lib;$(LibraryPath)</LibraryPath>
-    <IncludePath>E:\Programming\C++\AI\XO\GameData;E:\Programming\C++\AI\XO\Globals;E:\Programming\C++\AI\XO\NetGlobals;$(IncludePath)</IncludePath>
-    <OutDir>..\Lib\</OutDir>
+    <IncludePath>E:\Programming\C++\AI\XO\GameData;E:\Programming\C++\AI\XO\Globals;E:\Programming\C++\AI\XO\Networking\NetGlobals;$(IncludePath)</IncludePath>
+    <OutDir>..\..\Lib\</OutDir>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
-    <IncludePath>E:\Programming\C++\AI\XO\Globals;E:\Programming\C++\AI\XO\NetGlobals;$(IncludePath)</IncludePath>
+    <IncludePath>E:\Programming\C++\AI\XO\GameData;E:\Programming\C++\AI\XO\Globals;E:\Programming\C++\AI\XO\Networking\NetGlobals;$(IncludePath)</IncludePath>
     <LibraryPath>E:\Programming\C++\AI\XO\Lib;$(LibraryPath)</LibraryPath>
-    <OutDir>..\Lib\</OutDir>
+    <OutDir>..\..\Lib\</OutDir>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <ClCompile>
