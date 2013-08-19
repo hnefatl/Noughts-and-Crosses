@@ -8,9 +8,19 @@
 
 #include <vector>
 
+#include "Grid.h"
+#include "Player.h"
+#include "HumanPlayer.h"
+#include "AIPlayer.h"
+#include "OnlinePlayer.h"
+
+#include "NewGameDialog.h"
+
 class MainWindow
 	: public QWidget
 {
+	Q_OBJECT
+
 public:
 	MainWindow(QWidget *Parent=NULL);
 	~MainWindow();
@@ -18,6 +28,7 @@ public:
 	void SetStatusText(std::string Text);
 
 public:
+	// Widgets
 	QMenuBar *MenuBar;
 	QMenu *FileMenu;
 	QAction *StartNewGame;
@@ -25,6 +36,11 @@ public:
 
 	QLineEdit *Status;
 	std::vector<std::vector<QPushButton *>> Buttons;
+
+	// Variables
+	Grid Board;
+	std::vector<Player *> Players;
+	NewGameDialog *Dialog_NewGame;
 
 private:
 	void Initialise();

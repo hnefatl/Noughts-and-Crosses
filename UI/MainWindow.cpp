@@ -12,6 +12,19 @@ MainWindow::MainWindow(QWidget *Parent)
 }
 MainWindow::~MainWindow()
 {
+	delete MenuBar;
+	delete FileMenu;
+	delete StartNewGame;
+	delete Exit;
+	delete Status;
+	for(unsigned int y=0; y<Buttons.size(); y++)
+	{
+		for(unsigned int x=0; x<Buttons[y].size(); x++)
+		{
+			delete Buttons[y][x];
+		}
+	}
+	delete Dialog_NewGame;
 }
 
 void MainWindow::Initialise()
@@ -22,27 +35,30 @@ void MainWindow::Initialise()
 	// Set title to "XO"
 	setWindowTitle(QString("XO"));
 
-	// Set up StartNewGame action
-	StartNewGame=new QAction(QString("New game..."), this);
+	// Set up Menu bar, setting the parent to this window
+	MenuBar=new QMenuBar(this);
+	// Set up FileMenu, setting the parent to MenuBar
+	FileMenu=new QMenu(QString("File"), MenuBar);
+
+	// Set up StartNewGame action, setting its parent as FileMenu
+	StartNewGame=new QAction(QString("New game..."), FileMenu);
 	StartNewGame->setShortcut(QKeySequence(QString("Ctrl+N")));
 	StartNewGame->setStatusTip(QString("Start a new game."));
 	connect(StartNewGame, SIGNAL(triggered()), this, SLOT(NewGame()));
 
-	// Set up Exit action
-	Exit=new QAction(QString("Exit"), this);
+	// Set up Exit action, setting its parent as FileMenu
+	Exit=new QAction(QString("Exit"), FileMenu);
 	Exit->setShortcut(QKeySequence(QString("Alt+F4")));
 	Exit->setStatusTip(QString("Exits the application."));
-	connect(Exit, SIGNAL(triggered()), this, SLOT(quit()));
+	connect(Exit, SIGNAL(triggered()), this, SLOT(close()));
 
 	// Set up FileMenu
-	FileMenu=new QMenu(QString("File"), this);
 	FileMenu->addAction(StartNewGame);
 	FileMenu->addAction(Exit);
 
-	// Set up Menu bar, setting the parent to this window
-	MenuBar=new QMenuBar(this);
+	// Menubar
 	// Set size
-	MenuBar->setGeometry(0, 0, WindowWidth, 20);
+	MenuBar->setGeometry(0, 0, WindowWidth, 21);
 	// Create a menu on it
 	MenuBar->addMenu(FileMenu);
 
@@ -55,7 +71,10 @@ void MainWindow::Initialise()
 	// Disable the box (no user interaction)
 	Status->setEnabled(false);
 	// Set the text to the initial message
-	SetStatusText(StatusMessages::NewGameMessage);
+	SetStatusText(StatusMessages::Generic::NewGameMessage);
+
+	// Set up the new game dialog
+	Dialog_NewGame=new NewGameDialog(this);
 
 	// Set up the array of buttons
 	Buttons.resize(GridSize);
@@ -88,6 +107,9 @@ void MainWindow::Initialise()
 
 bool MainWindow::NewGame()
 {
+	// Show the dialog (modal is set in its initialisation stage)
+	Dialog_NewGame->show();
+
 	return true;
 }
 

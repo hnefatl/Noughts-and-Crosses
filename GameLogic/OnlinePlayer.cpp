@@ -1,14 +1,18 @@
 #include "OnlinePlayer.h"
 
-OnlinePlayer::OnlinePlayer(std::string IP, std::string Port)
-	:IP(IP),
-	Port(Port)
+OnlinePlayer::OnlinePlayer()
 {
 
 }
 OnlinePlayer::~OnlinePlayer()
 {
 
+}
+
+void OnlinePlayer::SetData(std::string IP, std::string Port)
+{
+	this->IP=IP;
+	this->Port=Port;
 }
 
 std::string OnlinePlayer::Initialise()

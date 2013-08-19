@@ -8,8 +8,10 @@ class OnlinePlayer
 	: public Player, public Client
 {
 public:
-	OnlinePlayer(std::string IP, std::string Port);
+	OnlinePlayer();
 	~OnlinePlayer();
+
+	void SetData(std::string IP, std::string Port);
 
 	std::string Initialise();
 
