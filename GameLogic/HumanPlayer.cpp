@@ -1,6 +1,7 @@
 #include "HumanPlayer.h"
 
 HumanPlayer::HumanPlayer()
+	:Player(PlayerType::Human)
 {
 
 }

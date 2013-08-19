@@ -10,21 +10,12 @@ NewGameDialog::NewGameDialog(QWidget *Parent)
 }
 NewGameDialog::~NewGameDialog()
 {
-	delete PlayerType;
-	delete OpponentType;
-	delete PlayerType_Human;
-	delete PlayerType_AI;
-	delete OpponentType_Human;
-	delete OpponentType_AI;
-	delete OpponentType_Online;
-	delete StartButton;
 }
 
 void NewGameDialog::Initialise()
 {
 	resize(270, 150);
 	setWindowTitle(QString("New game"));
-	setModal(true);
 
 	PlayerType=new QGroupBox(QString("Player Type"), this);
 	PlayerType->setGeometry(10, 10, 120, 90);
@@ -84,5 +75,7 @@ void NewGameDialog::Exit()
 	{
 		GameOpponent=new OnlinePlayer();
 	}
-	close();
+
+	// Quit the dialog
+	done(Accepted);
 }

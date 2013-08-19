@@ -15,6 +15,7 @@
 #include "OnlinePlayer.h"
 
 #include "NewGameDialog.h"
+#include "OnlinePlayerSettingDialogs.h"
 
 class MainWindow
 	: public QWidget
@@ -40,13 +41,14 @@ public:
 	// Variables
 	Grid Board;
 	std::vector<Player *> Players;
-	NewGameDialog *Dialog_NewGame;
 
 private:
 	void Initialise();
 
 private slots:
 	bool NewGame();
+
+	bool Play();
 };
 
 #endif

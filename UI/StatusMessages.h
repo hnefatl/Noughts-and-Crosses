@@ -12,6 +12,7 @@ namespace StatusMessages
 		extern const std::string Player2Turn;
 		extern const std::string Player1Win;
 		extern const std::string Player2Win;
+		extern const std::string Draw;
 	}
 	namespace Net
 	{

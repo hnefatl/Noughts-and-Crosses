@@ -6,6 +6,7 @@
 #include <ctime>
 
 AIPlayer::AIPlayer()
+	:Player(PlayerType::AI)
 {
 
 }

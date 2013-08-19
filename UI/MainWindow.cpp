@@ -3,11 +3,17 @@
 #include "Globals.h"
 #include "StatusMessages.h"
 
+#include "Player.h"
+#include "HumanPlayer.h"
+#include "AIPlayer.h"
+#include "OnlinePlayer.h"
+
 #include <sstream>
 
 MainWindow::MainWindow(QWidget *Parent)
 	:QWidget(Parent)
 {
+	Players.resize(2); // Make room for two players
 	Initialise();
 }
 MainWindow::~MainWindow()
@@ -24,7 +30,6 @@ MainWindow::~MainWindow()
 			delete Buttons[y][x];
 		}
 	}
-	delete Dialog_NewGame;
 }
 
 void MainWindow::Initialise()
@@ -73,9 +78,6 @@ void MainWindow::Initialise()
 	// Set the text to the initial message
 	SetStatusText(StatusMessages::Generic::NewGameMessage);
 
-	// Set up the new game dialog
-	Dialog_NewGame=new NewGameDialog(this);
-
 	// Set up the array of buttons
 	Buttons.resize(GridSize);
 	for(unsigned int x=0; x<GridSize; x++)
@@ -108,7 +110,138 @@ void MainWindow::Initialise()
 bool MainWindow::NewGame()
 {
 	// Show the dialog (modal is set in its initialisation stage)
-	Dialog_NewGame->show();
+	NewGameDialog *Dialog_NewGame=new NewGameDialog(this);
+	Dialog_NewGame->exec();
+	if(!Dialog_NewGame->ExitedLegally)
+	{
+		// Exited without agreeing
+		return false;
+	}
+
+	if(Dialog_NewGame->GameOpponent->Type==PlayerType::Online)
+	{
+		// The opponent is an online player
+		OnlinePlayerSettingsDialog *Dialog_OnlinePlayerSettings=new OnlinePlayerSettingsDialog();
+		Dialog_OnlinePlayerSettings->exec();
+		if(!Dialog_OnlinePlayerSettings->ExitedLegally)
+		{
+			delete Dialog_OnlinePlayerSettings;
+			// Exited without agreeing
+			return false;
+		}
+		((OnlinePlayer *)Dialog_NewGame->GameOpponent)->SetData(Dialog_OnlinePlayerSettings->IP, Dialog_OnlinePlayerSettings->Port);
+		delete Dialog_OnlinePlayerSettings;
+	}
+	// No going back - the players have been chosen
+
+	// Reset the players
+	for(unsigned int x=0; x<Players.size(); x++)
+	{
+		if(Players[x]!=NULL)
+		{
+			delete Players[x];
+			Players[x]=NULL;
+		}
+	}
+	// Assign our new players
+	Players[0]=Dialog_NewGame->GamePlayer;
+	Players[1]=Dialog_NewGame->GameOpponent;
+
+	// Disable all buttons
+	for(unsigned int y=0; y<Buttons.size(); y++)
+	{
+		for(unsigned int x=0; x<Buttons.size(); x++)
+		{
+			// Disable
+			Buttons[y][x]->setEnabled(false);
+			// Remove any text
+			Buttons[y][x]->setText(QString());
+		}
+	}
+
+	delete Dialog_NewGame;
+
+	return Play();
+}
+
+bool MainWindow::Play()
+{
+	if(Players.size()!=2)
+	{
+		return false;
+	}
+
+	unsigned int CurrentPlayer=0;
+	unsigned int CellsFilled=0;
+	// While not won and the board is not full
+	while((!Board.IsGoalState(CellContents::Cross) || !Board.IsGoalState(CellContents::Nought)) && CellsFilled!=GridSize*GridSize)
+	{
+		if(CurrentPlayer==0)
+		{
+			SetStatusText(StatusMessages::Generic::Player1Turn);
+		}
+		else
+		{
+			SetStatusText(StatusMessages::Generic::Player2Turn);
+		}
+		// Enable buttons
+		for(unsigned int y=0; y<GridSize; y++)
+		{
+			for(unsigned int x=0; x<GridSize; x++)
+			{
+				// If button has not been pressed
+				if(Buttons[y][x]->text().toStdString()=="")
+				{
+					// Enable the button
+					Buttons[y][x]->setEnabled(true);
+				}
+			}
+		}
+		Move ChosenMove;
+		if(Players[CurrentPlayer]->Type!=PlayerType::Human)
+		{
+			// Non-human player
+			Players[CurrentPlayer]->GetMove(&ChosenMove);
+		}
+		else
+		{
+			// Human player
+			// Wait for a button to be pressed
+		}
+		// Set new "virtual" value
+		Board.Board[ChosenMove.Position.Y][ChosenMove.Position.X].Set(ChosenMove.Value);
+		CellsFilled++;
+		// Set new "physical" value
+		Buttons[ChosenMove.Position.Y][ChosenMove.Position.X]->setEnabled(false);
+		Buttons[ChosenMove.Position.Y][ChosenMove.Position.X]->setText(QString(ChosenMove.Value==CellContents::Cross?"X":"O"));
+
+		// Inform all players of the new state
+		for(unsigned int x=0; x<Players.size(); x++)
+		{
+			Players[x]->InformMove(&Board);
+		}
+
+		// Swap player
+		CurrentPlayer==0?CurrentPlayer=1:CurrentPlayer=0;
+		// Disable the buttons
+		for(unsigned int y=0; y<GridSize; y++)
+		{
+			for(unsigned int x=0; x<GridSize; x++)
+			{
+				// If button has not been pressed
+				if(Buttons[y][x]->text().toStdString()=="")
+				{
+					// Disable the button
+					Buttons[y][x]->setEnabled(false);
+				}
+			}
+		}
+	}
+	// Game is over
+	if(Board.IsGoalState(CellContents::Cross))
+	{
+
+	}
 
 	return true;
 }

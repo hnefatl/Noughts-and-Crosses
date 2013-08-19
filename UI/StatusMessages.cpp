@@ -9,6 +9,7 @@ namespace StatusMessages
 		const std::string Player2Turn="Player 2's turn.";
 		const std::string Player1Win="Player 1 has won!";
 		const std::string Player2Win="Player 2 has won!";
+		const std::string Draw="There is a draw!";
 	}
 	namespace Net
 	{

@@ -2,6 +2,10 @@
 
 #include "Networking.h"
 
+Client::Client()
+{
+}
+
 bool Client::Connect(std::string IP, std::string Port)
 {
 	WSAData Data;

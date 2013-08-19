@@ -1,6 +1,7 @@
 #include "Player.h"
 
-Player::Player()
+Player::Player(PlayerType Type)
+	:Type(Type)
 {
 
 }

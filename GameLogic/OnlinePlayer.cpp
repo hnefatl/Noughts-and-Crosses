@@ -1,6 +1,7 @@
 #include "OnlinePlayer.h"
 
 OnlinePlayer::OnlinePlayer()
+	:Player(PlayerType::Online)
 {
 
 }

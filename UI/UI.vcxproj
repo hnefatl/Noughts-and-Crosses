@@ -103,6 +103,7 @@
     <ClCompile Include="main.cpp" />
     <ClCompile Include="MainWindow.cpp" />
     <ClCompile Include="NewGameDialog.cpp" />
+    <ClCompile Include="OnlinePlayerSettingsDialog.cpp" />
     <ClCompile Include="StatusMessages.cpp" />
   </ItemGroup>
   <ItemGroup>
