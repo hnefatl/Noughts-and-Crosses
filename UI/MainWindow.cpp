@@ -23,9 +23,21 @@ void MainWindow::Initialise()
 	setWindowTitle(QString("XO"));
 
 	// Set up StartNewGame action
-	StartNewGame=new QAction("New game...", this);
+	StartNewGame=new QAction(QString("New game..."), this);
 	StartNewGame->setShortcut(QKeySequence(QString("Ctrl+N")));
 	StartNewGame->setStatusTip(QString("Start a new game."));
+	connect(StartNewGame, SIGNAL(triggered()), this, SLOT(NewGame()));
+
+	// Set up Exit action
+	Exit=new QAction(QString("Exit"), this);
+	Exit->setShortcut(QKeySequence(QString("Alt+F4")));
+	Exit->setStatusTip(QString("Exits the application."));
+	connect(Exit, SIGNAL(triggered()), this, SLOT(quit()));
+
+	// Set up FileMenu
+	FileMenu=new QMenu(QString("File"), this);
+	FileMenu->addAction(StartNewGame);
+	FileMenu->addAction(Exit);
 
 	// Set up Menu bar, setting the parent to this window
 	MenuBar=new QMenuBar(this);
@@ -72,6 +84,11 @@ void MainWindow::Initialise()
 			Buttons[y][x]->setGeometry(10+(85*x), 60+(85*y), 75, 75);
 		}
 	}
+}
+
+bool MainWindow::NewGame()
+{
+	return true;
 }
 
 void MainWindow::SetStatusText(std::string Text)

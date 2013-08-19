@@ -21,12 +21,15 @@ public:
 	QMenuBar *MenuBar;
 	QMenu *FileMenu;
 	QAction *StartNewGame;
+	QAction *Exit;
+
 	QLineEdit *Status;
 	std::vector<std::vector<QPushButton *>> Buttons;
 
 private:
 	void Initialise();
 
+private slots:
 	bool NewGame();
 };
 
