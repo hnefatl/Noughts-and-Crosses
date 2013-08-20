@@ -5,7 +5,6 @@
 #include <QtWidgets\qlineedit.h>
 #include <QtWidgets\qpushbutton.h>
 #include <QtWidgets\qmenubar.h>
-#include <qthread.h>
 
 #include <vector>
 #include <thread>
@@ -43,8 +42,7 @@ public:
 	// Variables
 	Grid Board;
 	std::vector<Player *> Players;
-
-private slots:
+public slots:
 	bool NewGame();
 
 	bool Play();
@@ -54,10 +52,10 @@ private slots:
 private:
 	void Initialise();
 
-	std::thread PlayingThread;
-
 	bool ButtonPressed;
 	Vector ButtonLocation;
+
+	std::thread PlayingThread;
 };
 
 #endif

@@ -11,7 +11,8 @@
 #include <sstream>
 
 MainWindow::MainWindow(QWidget *Parent)
-	:QWidget(Parent)
+	:QWidget(Parent),
+	ButtonPressed(false)
 {
 	Players.resize(2); // Make room for two players
 	Initialise();
@@ -168,7 +169,7 @@ bool MainWindow::NewGame()
 	{
 		for(unsigned int x=0; x<Buttons.size(); x++)
 		{
-			// Disable
+			// Disable button
 			Buttons[y][x]->setEnabled(false);
 			// Remove any text
 			Buttons[y][x]->setText(QString());
@@ -176,7 +177,7 @@ bool MainWindow::NewGame()
 	}
 
 	// Start the game on a new thread
-	PlayingThread=std::thread(&MainWindow::Play, this);
+	Play();
 	return true;
 }
 
@@ -225,6 +226,7 @@ bool MainWindow::Play()
 					{
 						// Enable the button
 						Buttons[y][x]->setEnabled(true);
+						Buttons[y][x]->repaint();
 					}
 				}
 			}
@@ -236,7 +238,8 @@ bool MainWindow::Play()
 			// If something went wrong
 			if(Players[CurrentPlayer]->GetMove(&ChosenMove)!="")
 			{
-				
+				SetStatusText("Error");
+				return false;
 			}
 		}
 		else
@@ -260,7 +263,7 @@ bool MainWindow::Play()
 			// Now wait for "ButtonPressed" to become true
 			while(!ButtonPressed)
 			{
-				Sleep(10); // Slightly ease of the CPU
+				Sleep(10); // Slightly ease off the CPU
 			}
 
 			// Disable the triggers
@@ -309,6 +312,7 @@ bool MainWindow::Play()
 				{
 					// Disable the button
 					Buttons[y][x]->setEnabled(false);
+					Buttons[y][x]->repaint();
 				}
 			}
 		}
@@ -356,4 +360,5 @@ void MainWindow::WaitForButtonPress()
 void MainWindow::SetStatusText(std::string Text)
 {
 	Status->setText(QString(Text.c_str()));
+	Status->repaint();
 }

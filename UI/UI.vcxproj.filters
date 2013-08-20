@@ -80,8 +80,5 @@
     <ClInclude Include="OnlinePlayerSettingDialogs.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="GameThread.h">
-      <Filter>Header Files</Filter>
-    </ClInclude>
   </ItemGroup>
 </Project>
