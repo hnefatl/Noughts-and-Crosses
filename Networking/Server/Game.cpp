@@ -1,6 +1,7 @@
 #include "Game.h"
 
 #include "NetStrings.h"
+#include "Globals.h"
 
 Game::Game()
 	:Playing(true)
@@ -31,6 +32,8 @@ void Game::_Play()
 {
 	/*
 	The structure of the game is thus:
+	Pre-step. Initialise each Client, sending them a 0 or a 1 to symbolise whether they are an X or a O
+	
 	1. Send a message to PlayerOne informing it that it is its go.
 	2. Receive a message from PlayerOne informing the server of the move taken.
 	3. Send a message to PlayerOne and PlayerTwo informing them of the move taken
@@ -51,8 +54,13 @@ void Game::_Play()
 	// Whose turn it is
 	unsigned int CurrentPlayer=0;
 
-	// While the game has not been won
-	while(!Board.IsGoalState(CellContents::Cross) && !Board.IsGoalState(CellContents::Nought))
+	// Prestep
+	Players[0]->Send("0"); // First player to connect goes first
+	Players[1]->Send("1"); // Second player to connect goes second
+
+	// While the game has not been won and the board is not full
+	unsigned int CellsFilled=0;
+	while((!Board.IsGoalState(CellContents::Cross) && !Board.IsGoalState(CellContents::Nought)) && CellsFilled!=GridSize*GridSize)
 	{
 		Players[CurrentPlayer]->Send(TurnIndicator);
 		std::string BoardState;
@@ -81,12 +89,8 @@ void Game::_Play()
 		CurrentPlayer==0?CurrentPlayer==1:CurrentPlayer=0;
 	}
 
-	// The game has now been won - each player also has the winning board state stored locally, so they can
+	// The game has now been won or drawn - each player also has the winning board state stored locally, so they can
 	// work out who won too.
-	for(unsigned int x=0; x<Players.size(); x++)
-	{
-		Players[x]->Send(WinIndicator);
-	}
 }
 
 bool Game::IsPlaying()

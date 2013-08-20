@@ -5,6 +5,7 @@
 
 #include "Move.h"
 #include "Grid.h"
+#include "CellContents.h"
 
 #include "PlayerType.h"
 
@@ -19,6 +20,7 @@ public:
 	virtual std::string InformMove(Grid *NewState)=0;
 
 	PlayerType Type;
+	CellContents PlayerSymbol;
 };
 
 #endif

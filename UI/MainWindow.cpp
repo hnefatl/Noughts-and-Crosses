@@ -129,8 +129,23 @@ bool MainWindow::NewGame()
 			// Exited without agreeing
 			return false;
 		}
+		// Set the online players IP and Port
 		((OnlinePlayer *)Dialog_NewGame->GameOpponent)->SetData(Dialog_OnlinePlayerSettings->IP, Dialog_OnlinePlayerSettings->Port);
 		delete Dialog_OnlinePlayerSettings;
+
+		//Get the symbol of the Online player from the server
+		std::string Received;
+		((OnlinePlayer *)Dialog_NewGame->GameOpponent)->Receive(&Received);
+		// Assign the opponent's symbol based on what character was received from the server
+		Dialog_NewGame->GameOpponent->PlayerSymbol=Received=="0"?CellContents::Cross:CellContents::Nought;
+		// Assign the player's symbol based on the symbol received from the server
+		Dialog_NewGame->GamePlayer->PlayerSymbol=Received=="1"?CellContents::Cross:CellContents::Nought;
+	}
+	else
+	{
+		// Not an online player - set the symbols manually
+		Dialog_NewGame->GamePlayer->PlayerSymbol=CellContents::Cross;
+		Dialog_NewGame->GameOpponent->PlayerSymbol=CellContents::Nought;
 	}
 	// No going back - the players have been chosen
 
@@ -146,6 +161,7 @@ bool MainWindow::NewGame()
 	// Assign our new players
 	Players[0]=Dialog_NewGame->GamePlayer;
 	Players[1]=Dialog_NewGame->GameOpponent;
+	delete Dialog_NewGame; // Clean up
 
 	// Disable all buttons
 	for(unsigned int y=0; y<Buttons.size(); y++)
@@ -159,15 +175,26 @@ bool MainWindow::NewGame()
 		}
 	}
 
-	delete Dialog_NewGame;
-
-	return Play();
+	// Start the game on a new thread
+	PlayingThread=std::thread(&MainWindow::Play, this);
+	return true;
 }
 
 bool MainWindow::Play()
 {
 	if(Players.size()!=2)
 	{
+		return false;
+	}
+
+	Players[0]->Initialise();
+	if(Players[1]->Type==PlayerType::Online)
+	{
+		SetStatusText(StatusMessages::Net::WaitingForOpponent);
+	}
+	if(Players[1]->Initialise()!="")
+	{
+		SetStatusText(StatusMessages::Net::OpponentFailedToConnect);
 		return false;
 	}
 
@@ -184,30 +211,82 @@ bool MainWindow::Play()
 		{
 			SetStatusText(StatusMessages::Generic::Player2Turn);
 		}
-		// Enable buttons
-		for(unsigned int y=0; y<GridSize; y++)
+
+		// If we are waiting for a human move, enable the buttons
+		if(Players[CurrentPlayer]->Type==PlayerType::Human)
 		{
-			for(unsigned int x=0; x<GridSize; x++)
+			// Enable buttons
+			for(unsigned int y=0; y<GridSize; y++)
 			{
-				// If button has not been pressed
-				if(Buttons[y][x]->text().toStdString()=="")
+				for(unsigned int x=0; x<GridSize; x++)
 				{
-					// Enable the button
-					Buttons[y][x]->setEnabled(true);
+					// If button has not been pressed
+					if(Buttons[y][x]->text().toStdString()=="")
+					{
+						// Enable the button
+						Buttons[y][x]->setEnabled(true);
+					}
 				}
 			}
 		}
 		Move ChosenMove;
+		// Non-human player
 		if(Players[CurrentPlayer]->Type!=PlayerType::Human)
 		{
-			// Non-human player
-			Players[CurrentPlayer]->GetMove(&ChosenMove);
+			// If something went wrong
+			if(Players[CurrentPlayer]->GetMove(&ChosenMove)!="")
+			{
+				
+			}
 		}
 		else
 		{
 			// Human player
 			// Wait for a button to be pressed
+			// Loop through all buttons
+			for(unsigned int y=0; y<GridSize; y++)
+			{
+				for(unsigned int x=0; x<GridSize; x++)
+				{
+					// If the button has not been pressed yet
+					if(Buttons[y][x]->text().toStdString()=="")
+					{
+						// Connect the trigger to the function
+						connect(Buttons[y][x], &QPushButton::clicked, this, &MainWindow::WaitForButtonPress);
+					}
+				}
+			}
+
+			// Now wait for "ButtonPressed" to become true
+			while(!ButtonPressed)
+			{
+				Sleep(10); // Slightly ease of the CPU
+			}
+
+			// Disable the triggers
+			// Loop through all the buttons
+			for(unsigned int y=0; y<GridSize; y++)
+			{
+				for(unsigned int x=0; x<GridSize; x++)
+				{
+					// If the button has not been pressed yet
+					if(Buttons[y][x]->text().toStdString()=="")
+					{
+						// Disconnect the trigger from the function
+						disconnect(Buttons[y][x], &QPushButton::clicked, this, &MainWindow::WaitForButtonPress);
+					}
+				}
+			}
+
+			// Store the necessary data in ChosenMove
+			ChosenMove.Position=ButtonLocation;
+			ChosenMove.Value=Players[CurrentPlayer]->PlayerSymbol;
+
+			// Reset the storage variables
+			ButtonPressed=false;
+			ButtonLocation=Vector();
 		}
+
 		// Set new "virtual" value
 		Board.Board[ChosenMove.Position.Y][ChosenMove.Position.X].Set(ChosenMove.Value);
 		CellsFilled++;
@@ -221,29 +300,57 @@ bool MainWindow::Play()
 			Players[x]->InformMove(&Board);
 		}
 
-		// Swap player
-		CurrentPlayer==0?CurrentPlayer=1:CurrentPlayer=0;
-		// Disable the buttons
-		for(unsigned int y=0; y<GridSize; y++)
+		// Disable the buttons if the player was human
+		if(Players[CurrentPlayer]->Type==PlayerType::Human)
 		{
-			for(unsigned int x=0; x<GridSize; x++)
+			for(unsigned int y=0; y<GridSize; y++)
 			{
-				// If button has not been pressed
-				if(Buttons[y][x]->text().toStdString()=="")
+				for(unsigned int x=0; x<GridSize; x++)
 				{
 					// Disable the button
 					Buttons[y][x]->setEnabled(false);
 				}
 			}
 		}
+		// Swap player
+		CurrentPlayer==0?CurrentPlayer=1:CurrentPlayer=0;
 	}
-	// Game is over
-	if(Board.IsGoalState(CellContents::Cross))
-	{
 
+	// Game is over
+	if(Board.IsGoalState(Players[0]->PlayerSymbol))
+	{
+		SetStatusText(StatusMessages::Generic::Player1Win);
+	}
+	else if(Board.IsGoalState(Players[1]->PlayerSymbol))
+	{
+		SetStatusText(StatusMessages::Generic::Player2Win);
+	}
+	else
+	{
+		SetStatusText(StatusMessages::Generic::Draw);
 	}
 
 	return true;
+}
+
+void MainWindow::WaitForButtonPress()
+{
+	// Obtain the sender object
+	QObject *Sender=sender();
+	// Check every button
+	for(unsigned int y=0; y<GridSize; y++)
+	{
+		for(unsigned int x=0; x<GridSize; x++)
+		{
+			// If the pointers are the same
+			if(Buttons[y][x]==Sender)
+			{
+				ButtonPressed=true;
+				ButtonLocation.X=x;
+				ButtonLocation.Y=y;
+			}
+		}
+	}	
 }
 
 void MainWindow::SetStatusText(std::string Text)
