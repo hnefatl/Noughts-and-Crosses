@@ -27,8 +27,6 @@ public:
 	MainWindow(QWidget *Parent=NULL);
 	~MainWindow();
 
-	void SetStatusText(std::string Text);
-
 public:
 	// Widgets
 	QMenuBar *MenuBar;
@@ -48,6 +46,8 @@ public slots:
 	bool Play();
 
 	void WaitForButtonPress();
+
+	void SetStatusText(std::string Text);
 
 private:
 	void Initialise();
