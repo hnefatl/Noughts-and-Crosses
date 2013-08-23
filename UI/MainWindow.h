@@ -18,6 +18,8 @@
 #include "NewGameDialog.h"
 #include "OnlinePlayerSettingDialogs.h"
 
+#include "GameThread.h"
+
 class MainWindow
 	: public QWidget
 {
@@ -43,11 +45,17 @@ public:
 public slots:
 	bool NewGame();
 
-	bool Play();
+	Vector WaitForButtonPress();
 
-	void WaitForButtonPress();
+	void SetButtonText(const Vector &Button, const QString &Text);
+	void SetButtonEnabled(const Vector &Button, const bool &Enabled);
 
-	void SetStatusText(std::string Text);
+	void SetPressableButtonsEnabled(const bool &Enabled);
+
+	void SetStatusText(const QString &Text);
+
+private slots:
+	void _WaitForButtonPress();
 
 private:
 	void Initialise();
@@ -55,7 +63,7 @@ private:
 	bool ButtonPressed;
 	Vector ButtonLocation;
 
-	std::thread PlayingThread;
+	GameThread *PlayingThread;
 };
 
 #endif

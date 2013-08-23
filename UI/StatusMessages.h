@@ -1,24 +1,24 @@
 #ifndef _STATUSMESSAGES_H
 #define _STATUSMESSAGES_H
 
-#include <string>
+#include <qstring.h>
 
 namespace StatusMessages
 {
 	namespace Generic
 	{
-		extern const std::string NewGameMessage;
-		extern const std::string Player1Turn;
-		extern const std::string Player2Turn;
-		extern const std::string Player1Win;
-		extern const std::string Player2Win;
-		extern const std::string Draw;
+		extern const QString NewGameMessage;
+		extern const QString Player1Turn;
+		extern const QString Player2Turn;
+		extern const QString Player1Win;
+		extern const QString Player2Win;
+		extern const QString Draw;
 	}
 	namespace Net
 	{
-		extern const std::string OpponentDisconnected;
-		extern const std::string WaitingForOpponent;
-		extern const std::string OpponentFailedToConnect;
+		extern const QString OpponentDisconnected;
+		extern const QString WaitingForOpponent;
+		extern const QString OpponentFailedToConnect;
 	}
 }
 #endif

@@ -177,167 +177,45 @@ bool MainWindow::NewGame()
 	}
 
 	// Start the game on a new thread
-	Play();
+	if(PlayingThread!=NULL)
+	{
+		delete PlayingThread;
+	}
+	PlayingThread=new GameThread(Players[0], Players[1], this);
+	PlayingThread->start();
 	return true;
 }
 
-bool MainWindow::Play()
+Vector MainWindow::WaitForButtonPress()
 {
-	if(Players.size()!=2)
+	// Connect the functions
+	for(unsigned int y=0; y<Buttons.size(); y++)
 	{
-		return false;
+		for(unsigned int x=0; x<Buttons[y].size(); x++)
+		{
+			connect(Buttons[y][x], &QPushButton::pressed, this, &MainWindow::_WaitForButtonPress);
+		}
 	}
 
-	Players[0]->Initialise();
-	if(Players[1]->Type==PlayerType::Online)
+	// Wait for button to be pressed
+	while(!ButtonPressed)
 	{
-		SetStatusText(StatusMessages::Net::WaitingForOpponent);
-	}
-	if(Players[1]->Initialise()!="")
-	{
-		SetStatusText(StatusMessages::Net::OpponentFailedToConnect);
-		return false;
+		Sleep(10);
 	}
 
-	unsigned int CurrentPlayer=0;
-	unsigned int CellsFilled=0;
-	// While not won and the board is not full
-	while((!Board.IsGoalState(CellContents::Cross) || !Board.IsGoalState(CellContents::Nought)) && CellsFilled!=GridSize*GridSize)
+	// Disconnect the functions
+	for(unsigned int y=0; y<Buttons.size(); y++)
 	{
-		if(CurrentPlayer==0)
+		for(unsigned int x=0; x<Buttons[y].size(); x++)
 		{
-			SetStatusText(StatusMessages::Generic::Player1Turn);
+			disconnect(Buttons[y][x], &QPushButton::pressed, this, &MainWindow::_WaitForButtonPress);
 		}
-		else
-		{
-			SetStatusText(StatusMessages::Generic::Player2Turn);
-		}
-
-		// If we are waiting for a human move, enable the buttons
-		if(Players[CurrentPlayer]->Type==PlayerType::Human)
-		{
-			// Enable buttons
-			for(unsigned int y=0; y<GridSize; y++)
-			{
-				for(unsigned int x=0; x<GridSize; x++)
-				{
-					// If button has not been pressed
-					if(Buttons[y][x]->text().toStdString()=="")
-					{
-						// Enable the button
-						Buttons[y][x]->setEnabled(true);
-						Buttons[y][x]->repaint();
-					}
-				}
-			}
-		}
-		Move ChosenMove;
-		// Non-human player
-		if(Players[CurrentPlayer]->Type!=PlayerType::Human)
-		{
-			// If something went wrong
-			if(Players[CurrentPlayer]->GetMove(&ChosenMove)!="")
-			{
-				SetStatusText("Error");
-				return false;
-			}
-		}
-		else
-		{
-			// Human player
-			// Wait for a button to be pressed
-			// Loop through all buttons
-			for(unsigned int y=0; y<GridSize; y++)
-			{
-				for(unsigned int x=0; x<GridSize; x++)
-				{
-					// If the button has not been pressed yet
-					if(Buttons[y][x]->text().toStdString()=="")
-					{
-						// Connect the trigger to the function
-						connect(Buttons[y][x], &QPushButton::clicked, this, &MainWindow::WaitForButtonPress);
-					}
-				}
-			}
-
-			// Now wait for "ButtonPressed" to become true
-			while(!ButtonPressed)
-			{
-				Sleep(10); // Slightly ease off the CPU
-			}
-
-			// Disable the triggers
-			// Loop through all the buttons
-			for(unsigned int y=0; y<GridSize; y++)
-			{
-				for(unsigned int x=0; x<GridSize; x++)
-				{
-					// If the button has not been pressed yet
-					if(Buttons[y][x]->text().toStdString()=="")
-					{
-						// Disconnect the trigger from the function
-						disconnect(Buttons[y][x], &QPushButton::clicked, this, &MainWindow::WaitForButtonPress);
-					}
-				}
-			}
-
-			// Store the necessary data in ChosenMove
-			ChosenMove.Position=ButtonLocation;
-			ChosenMove.Value=Players[CurrentPlayer]->PlayerSymbol;
-
-			// Reset the storage variables
-			ButtonPressed=false;
-			ButtonLocation=Vector();
-		}
-
-		// Set new "virtual" value
-		Board.Board[ChosenMove.Position.Y][ChosenMove.Position.X].Set(ChosenMove.Value);
-		CellsFilled++;
-		// Set new "physical" value
-		Buttons[ChosenMove.Position.Y][ChosenMove.Position.X]->setEnabled(false);
-		Buttons[ChosenMove.Position.Y][ChosenMove.Position.X]->setText(QString(ChosenMove.Value==CellContents::Cross?"X":"O"));
-
-		// Inform all players of the new state
-		for(unsigned int x=0; x<Players.size(); x++)
-		{
-			Players[x]->InformMove(&Board);
-		}
-
-		// Disable the buttons if the player was human
-		if(Players[CurrentPlayer]->Type==PlayerType::Human)
-		{
-			for(unsigned int y=0; y<GridSize; y++)
-			{
-				for(unsigned int x=0; x<GridSize; x++)
-				{
-					// Disable the button
-					Buttons[y][x]->setEnabled(false);
-					Buttons[y][x]->repaint();
-				}
-			}
-		}
-		// Swap player
-		CurrentPlayer==0?CurrentPlayer=1:CurrentPlayer=0;
 	}
 
-	// Game is over
-	if(Board.IsGoalState(Players[0]->PlayerSymbol))
-	{
-		SetStatusText(StatusMessages::Generic::Player1Win);
-	}
-	else if(Board.IsGoalState(Players[1]->PlayerSymbol))
-	{
-		SetStatusText(StatusMessages::Generic::Player2Win);
-	}
-	else
-	{
-		SetStatusText(StatusMessages::Generic::Draw);
-	}
-
-	return true;
+	return ButtonLocation;
 }
 
-void MainWindow::WaitForButtonPress()
+void MainWindow::_WaitForButtonPress()
 {
 	// Obtain the sender object
 	QObject *Sender=sender();
@@ -357,8 +235,33 @@ void MainWindow::WaitForButtonPress()
 	}	
 }
 
-void MainWindow::SetStatusText(std::string Text)
+void MainWindow::SetButtonText(const Vector &Button, const QString &Text)
 {
-	Status->setText(QString(Text.c_str()));
-	Status->repaint();
+	Buttons[Button.X][Button.Y]->setText(Text);
+	Buttons[Button.X][Button.Y]->update();
+}
+void MainWindow::SetButtonEnabled(const Vector &Button, const bool &Enabled)
+{
+	Buttons[Button.X][Button.Y]->setEnabled(Enabled);
+}
+
+void MainWindow::SetPressableButtonsEnabled(const bool &Enabled)
+{
+	for(unsigned int y=0; y<Buttons.size(); y++)
+	{
+		for(unsigned int x=0; x<Buttons[y].size(); x++)
+		{
+			// If the text is empty
+			if(Buttons[y][x]->text()==QString())
+			{
+				Buttons[y][x]->setEnabled(Enabled);
+			}
+		}
+	}
+}
+
+void MainWindow::SetStatusText(const QString &Text)
+{
+	Status->setText(Text);
+	Status->update();
 }
