@@ -24,26 +24,10 @@ enum CONSOLECOLOUR
     WHITE       = 15
 };
 
-void SetColour(const int foreground, const int background) {
+extern void SetColour(CONSOLECOLOUR foreground, CONSOLECOLOUR background);
 
-    int Color = foreground + (background * 16);
-    HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);
-    SetConsoleTextAttribute(hConsole, Color);
-}
+extern void SetCursor(int x, int y);
 
-void SetCursor(int x, int y) {
-  HANDLE hStdout;
-  CONSOLE_SCREEN_BUFFER_INFO csbiInfo;
-  hStdout=GetStdHandle(STD_OUTPUT_HANDLE);
-  GetConsoleScreenBufferInfo(hStdout, &csbiInfo);
-  csbiInfo.dwCursorPosition.X=x;
-  csbiInfo.dwCursorPosition.Y=y;
-  SetConsoleCursorPosition(hStdout, csbiInfo.dwCursorPosition);
-}
-
-void Clear()
-{
-	system("cls");
-}
+extern void Clear();
 
 #endif

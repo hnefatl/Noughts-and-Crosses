@@ -30,8 +30,11 @@
     <ClCompile Include="Game.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="PlayerChoiceWindow.cpp">
+    <ClCompile Include="Windows\PlayerChoiceWindow.cpp">
       <Filter>Source Files\Windows</Filter>
+    </ClCompile>
+    <ClCompile Include="ConsoleControl.cpp">
+      <Filter>Source Files</Filter>
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
@@ -44,10 +47,10 @@
     <ClInclude Include="ConsoleControl.h">
       <Filter>Header Files</Filter>
     </ClInclude>
-    <ClInclude Include="Window.h">
+    <ClInclude Include="Windows\Window.h">
       <Filter>Header Files\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="PlayerChoiceWindow.h">
+    <ClInclude Include="Windows\PlayerChoiceWindow.h">
       <Filter>Header Files\Windows</Filter>
     </ClInclude>
   </ItemGroup>
