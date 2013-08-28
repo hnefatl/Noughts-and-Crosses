@@ -36,10 +36,10 @@
     <ClCompile Include="ConsoleControl.cpp">
       <Filter>Source Files</Filter>
     </ClCompile>
-    <ClCompile Include="NetworkOptions.cpp">
+    <ClCompile Include="Window.cpp">
       <Filter>Source Files\Windows</Filter>
     </ClCompile>
-    <ClCompile Include="Window.cpp">
+    <ClCompile Include="Windows\NetworkOptions.cpp">
       <Filter>Source Files\Windows</Filter>
     </ClCompile>
   </ItemGroup>
@@ -59,7 +59,7 @@
     <ClInclude Include="Windows\PlayerChoiceWindow.h">
       <Filter>Header Files\Windows</Filter>
     </ClInclude>
-    <ClInclude Include="NetworkOptions.h">
+    <ClInclude Include="Windows\NetworkOptions.h">
       <Filter>Header Files\Windows</Filter>
     </ClInclude>
   </ItemGroup>
