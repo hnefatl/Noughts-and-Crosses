@@ -18,12 +18,13 @@ std::string HumanPlayer::Initialise()
 
 std::string HumanPlayer::GetMove(Move *ChosenMove)
 {
-	// Nothing needs to be done
+	// Get input
+
 	return ""; // Return no error
 }
 
 std::string HumanPlayer::InformMove(Grid *NewState)
 {
-	// Nothing needs to be done
+	// Nothing needs to be done - it should be drawn by the program anyway
 	return ""; // Return no error
 }

@@ -1,5 +1,7 @@
 #include "ConsoleControl.h"
 
+#include <Windows.h>
+
 void SetColour(CONSOLECOLOUR foreground, CONSOLECOLOUR background) {
 
     int Color = foreground + (background * 16);
@@ -20,4 +22,12 @@ void SetCursor(int x, int y) {
 void Clear()
 {
 	system("cls");
+}
+
+void EnableCursor(bool Shown)
+{
+	CONSOLE_CURSOR_INFO Info;
+	Info.bVisible=Shown;
+	Info.dwSize=1;
+	SetConsoleCursorInfo(GetStdHandle(STD_OUTPUT_HANDLE), &Info);
 }

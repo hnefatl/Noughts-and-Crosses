@@ -125,3 +125,8 @@ bool Net::ReceivePlain(SOCKET Target, std::string *Buffer, unsigned int Length)
 
 	return true;
 }
+bool Net::ValidIP(std::string IP)
+{
+	sockaddr_in sa;
+	return inet_pton(AF_INET, IP.c_str(), &sa.sin_addr)!=0;
+}

@@ -13,11 +13,19 @@ public:
 
 	// virtual bool Run();     // Default implementation suffices
 
+	std::string IP, Port;
 protected:
 	virtual UpdateResult Update();
 	virtual void Draw(bool Initial=false);
 
-	std::string IP, Port;
-}
+	bool IsNumber(char Input);
+	bool IsDot(char Input);
+	bool IsValidInput();
+
+	unsigned int CurrentlySelected;
+	std::string OldIP, OldPort;
+
+	std::string IPText, PortText;
+};
 
 #endif

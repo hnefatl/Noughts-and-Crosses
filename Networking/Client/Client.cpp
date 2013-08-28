@@ -42,7 +42,7 @@ bool Client::Connect(std::string IP, std::string Port)
 
 		break;
 	}
-	if(p!=NULL)
+	if(p==NULL)
 	{
 		return false;
 	}

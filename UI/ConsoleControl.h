@@ -30,4 +30,6 @@ extern void SetCursor(int x, int y);
 
 extern void Clear();
 
+extern void EnableCursor(bool Shown);
+
 #endif
