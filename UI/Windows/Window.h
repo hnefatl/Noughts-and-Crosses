@@ -11,7 +11,7 @@ enum UpdateResult
 class Window
 {
 public:
-	virtual bool Run()=0;
+	virtual bool Run();
 
 protected:
 	virtual UpdateResult Update()=0;

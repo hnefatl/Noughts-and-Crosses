@@ -37,8 +37,8 @@ class PlayerChoiceWindow
 {
 public:
 	PlayerChoiceWindow();
-
-	virtual bool Run();
+	
+	// virtual bool Run();     // Default implementation suffices
 
 	Player *PlayerOne;
 	Player *PlayerTwo;
