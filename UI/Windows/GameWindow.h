@@ -18,7 +18,7 @@ class GameWindow
 	: public Window
 {
 public:
-	GameWindow();
+	GameWindow(std::vector<Player *> Players);
 
 	virtual bool Run();
 
@@ -27,6 +27,8 @@ protected:
 	virtual void Draw(bool Initial=false);
 
 	void PrintError(std::string Error, std::string Additional="");
+
+	void DisplayWin();
 
 	Grid *Board;
 

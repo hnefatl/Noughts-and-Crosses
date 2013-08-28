@@ -4,6 +4,7 @@
 
 #include "Windows\PlayerChoiceWindow.h"
 #include "Windows\NetworkOptions.h"
+#include "Windows\GameWindow.h"
 
 #include <string>
 #include <conio.h>
@@ -46,6 +47,8 @@ bool Game::Play()
 	Clear();
 
 	// Next stage - initialise the players
+	Players[0]->PlayerSymbol=CellContents::Cross;
+	Players[1]->PlayerSymbol=CellContents::Nought;
 	for(unsigned int x=0; x<Players.size(); x++)
 	{
 		std::string Result=Players[x]->Initialise();
@@ -61,7 +64,11 @@ bool Game::Play()
 	}
 
 	// Now start the game
-
+	GameWindow Game(Players);
+	if(!Game.Run())
+	{
+		return 1;
+	}
 
 	return true;
 }

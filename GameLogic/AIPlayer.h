@@ -20,6 +20,8 @@ public:
 	std::string InformMove(Grid *NewState);
 
 private:
+	void GenerateTree(Node *Current, CellContents CurrentPlayer);
+
 	Node *Root;
 };
 

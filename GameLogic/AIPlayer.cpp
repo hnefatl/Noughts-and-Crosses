@@ -21,6 +21,8 @@ std::string AIPlayer::Initialise()
 	// Seed the random generator
 	srand((unsigned int)time(NULL));
 
+
+
 	// Return no error
 	return "";
 }
@@ -99,4 +101,20 @@ std::string AIPlayer::InformMove(Grid *NewState)
 
 	// Return no error
 	return "";
+}
+
+void AIPlayer::GenerateTree(Node *Current, CellContents CurrentPlayer)
+{
+	for(unsigned int y=0; y<GridSize; y++)
+	{
+		for(unsigned int x=0; x<GridSize; x++)
+		{
+			// If a move could be placed here
+			if(Current->State.Board[y][x].Get()==CellContents::Empty)
+			{
+				// Create a copy of the current state
+				Grid NewBoard=Current->State;
+			}
+		}
+	}
 }
