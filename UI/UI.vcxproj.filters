@@ -53,5 +53,8 @@
     <ClInclude Include="Windows\PlayerChoiceWindow.h">
       <Filter>Header Files\Windows</Filter>
     </ClInclude>
+    <ClInclude Include="NetworkOptions.h">
+      <Filter>Header Files\Windows</Filter>
+    </ClInclude>
   </ItemGroup>
 </Project>

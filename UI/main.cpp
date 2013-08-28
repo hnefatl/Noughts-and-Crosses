@@ -1,10 +1,9 @@
-#include <iostream>
-
-#include <string>
+#include "Game.h"
 
 int main(int argc, char *argv[])
 {
-
+	Game game;
+	game.Play();
 
 	return 0;
 }

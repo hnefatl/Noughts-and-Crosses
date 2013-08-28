@@ -1,6 +1,6 @@
 #include "ConsoleControl.h"
 
-void SetColour(const int foreground, const int background) {
+void SetColour(CONSOLECOLOUR foreground, CONSOLECOLOUR background) {
 
     int Color = foreground + (background * 16);
     HANDLE hConsole = GetStdHandle(STD_OUTPUT_HANDLE);

@@ -14,7 +14,7 @@ class Game
 public:
 	Game();
 
-	void Play();
+	bool Play();
 
 private:
 	std::vector<Player *> Players;

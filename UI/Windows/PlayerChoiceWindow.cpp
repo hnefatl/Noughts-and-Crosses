@@ -22,6 +22,12 @@ Column::Column(std::string Title, Vector Position)
 {
 }
 
+void Column::ChangeSelection(unsigned int NewSelection)
+{
+	PreviousSelection=CurrentSelection;
+	CurrentSelection=NewSelection;
+}
+
 void Column::Draw(bool Selected)
 {
 	// Draw the title
@@ -71,20 +77,12 @@ void Column::DrawContent(unsigned int ContentNumber, bool Selected)
 	SetColour(GREY, BLACK);
 }
 
-void Column::Update(unsigned int NewCurrentSelection)
+void Column::Update()
 {
-	// If we do actually need to make a change
-	if(CurrentSelection!=NewCurrentSelection)
-	{
-		// Swap the selections
-		PreviousSelection=CurrentSelection;
-		CurrentSelection=NewCurrentSelection;
-
-		// Redraw the newly unselected content
-		DrawContent(PreviousSelection, false);
-		// Redraw the newly selected content
-		DrawContent(CurrentSelection, true);
-	}
+	// Redraw the newly unselected content
+	DrawContent(PreviousSelection, false);
+	// Redraw the newly selected content
+	DrawContent(CurrentSelection, true);
 }
 
 // PlayerChoiceWindow
@@ -105,15 +103,22 @@ PlayerChoiceWindow::PlayerChoiceWindow()
 	Columns[1].Contents.push_back("Online");
 }
 
-void PlayerChoiceWindow::Run()
+bool PlayerChoiceWindow::Run()
 {
 	// Inital drawing
 	Draw(true);
 	// Window loop - update then draw
-	while(Update())
+	UpdateResult Result;
+	do
 	{
+		// Get the result of this "frame"
+		Result=Update();
+		// Draw any changes
 		Draw();
-	}
+	} while(Result==UpdateResult::urContinue);
+
+	// If the last keypress was Enter, return true. Otherwise, return false.
+	return Result==UpdateResult::urEnter;
 }
 
 UpdateResult PlayerChoiceWindow::Update()
@@ -131,20 +136,21 @@ UpdateResult PlayerChoiceWindow::Update()
 			// Check to see if it's a valid move
 			if(Columns[CurrentColumn].CurrentSelection>0)
 			{
-				Columns[CurrentColumn].CurrentSelection--;
+				Columns[CurrentColumn].ChangeSelection(Columns[CurrentColumn].CurrentSelection-1);
 			}
 			break;
 		case 80: // Down arrow
 			// Check to see it it's a valid move
 			if(Columns[CurrentColumn].CurrentSelection<Columns[CurrentColumn].Contents.size()-1)
 			{
-				Columns[CurrentColumn].CurrentSelection++;
+				Columns[CurrentColumn].ChangeSelection(Columns[CurrentColumn].CurrentSelection+1);
 			}
 			break;
 		case 75: // Left arrow
 			// Check to see if it's a valid move
 			if(CurrentColumn>0)
 			{
+				PreviousColumn=CurrentColumn;
 				CurrentColumn--;
 			}
 			break;
@@ -152,18 +158,21 @@ UpdateResult PlayerChoiceWindow::Update()
 			// Check to see if it's a valid move
 			if(CurrentColumn<Columns.size()-1)
 			{
+				PreviousColumn=CurrentColumn;
 				CurrentColumn++;
 			}
 			break;
 		}
 		break;
 	case 13: // Enter
-		return UpdateResult::Enter; // Exit
+		// Create the players
+		GetPlayersFromSelection();
+		return UpdateResult::urEnter; // Exit
 	case 27: // Escape
-		return UpdateResult::Escape;
+		return UpdateResult::urEscape;
 	}
 
-	return UpdateResult::Continue;
+	return UpdateResult::urContinue;
 }
 void PlayerChoiceWindow::Draw(bool Initial)
 {
@@ -178,6 +187,11 @@ void PlayerChoiceWindow::Draw(bool Initial)
 				OpponentColumnOffset=Columns[x].Contents[x].size();
 			}
 		}
+		// Perform the same check as above only on the title
+		if(Columns[0].Title.size()>OpponentColumnOffset)
+		{
+			OpponentColumnOffset=Columns[0].Title.size();
+		}
 		// Add some spacing to the end of the first column
 		OpponentColumnOffset+=5;
 		Columns[1].Position=Vector(OpponentColumnOffset, 1);
@@ -190,12 +204,11 @@ void PlayerChoiceWindow::Draw(bool Initial)
 	}
 	else
 	{
-		// Erase previous selection
-		Columns[CurrentColumn].DrawContent(Columns[CurrentColumn].CurrentSelection, false);
-		// Draw new selection
-		Columns[CurrentColumn].DrawContent(Columns[CurrentColumn].CurrentSelection, true);
+		// Update the selection
+		Columns[CurrentColumn].Update();
 
-		if(ColumnChanged)
+		// If a column switch has taken place
+		if(PreviousColumn!=CurrentColumn)
 		{
 			for(unsigned int x=0; x<Columns.size(); x++)
 			{
@@ -204,4 +217,21 @@ void PlayerChoiceWindow::Draw(bool Initial)
 			}
 		}
 	}
+}
+
+void PlayerChoiceWindow::GetPlayersFromSelection()
+{
+	std::string Player=Columns[0].Contents[Columns[0].CurrentSelection];
+	if(Player=="Human")
+		PlayerOne=new HumanPlayer();
+	else if(Player=="AI")
+		PlayerOne=new AIPlayer();
+
+	std::string Opponent=Columns[1].Contents[Columns[1].CurrentSelection];
+	if(Opponent=="Human")
+		PlayerTwo=new HumanPlayer();
+	else if (Opponent=="AI")
+		PlayerTwo=new AIPlayer();
+	else
+		PlayerTwo=new OnlinePlayer();
 }

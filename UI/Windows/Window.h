@@ -3,15 +3,15 @@
 
 enum UpdateResult
 {
-	Escape,
-	Enter,
-	Continue,
+	urEscape,
+	urEnter,
+	urContinue,
 };
 
 class Window
 {
 public:
-	virtual void Run()=0;
+	virtual bool Run()=0;
 
 protected:
 	virtual UpdateResult Update()=0;

@@ -23,11 +23,13 @@ public:
 	std::vector<std::string> Contents;
 	unsigned int CurrentSelection, PreviousSelection;
 
+	void ChangeSelection(unsigned int NewSelection);
+
 	void Draw(bool Selected);
 	void DrawTitle(bool Selected);
 	void DrawContent(unsigned int ContentNumber, bool Selected);
 
-	void Update(unsigned int NewCurrentSelection);
+	void Update();
 };
 
 class PlayerChoiceWindow
@@ -36,7 +38,7 @@ class PlayerChoiceWindow
 public:
 	PlayerChoiceWindow();
 
-	virtual void Run();
+	virtual bool Run();
 
 	Player *PlayerOne;
 	Player *PlayerTwo;
@@ -45,9 +47,9 @@ protected:
 	virtual UpdateResult Update();
 	virtual void Draw(bool Initial=false);
 
-private:
-	unsigned int CurrentColumn;
-	bool ColumnChanged;
+	void GetPlayersFromSelection();
+
+	unsigned int CurrentColumn, PreviousColumn;
 
 	std::vector<Column> Columns;
 };
