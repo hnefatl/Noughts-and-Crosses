@@ -16,6 +16,16 @@ GameWindow::GameWindow(std::vector<Player *> Players)
 
 bool GameWindow::Run()
 {	
+	// Find the current (first) player
+	for(unsigned int x=0; x<Players.size(); x++)
+	{
+		if(Players[x]->PlayerSymbol==(CellContents)FirstPlayer)
+		{
+			CurrentPlayer=x;
+			break;
+		}
+	}
+
 	// Disable the cursor
 	EnableCursor(false);
 	// Inital drawing
@@ -262,6 +272,7 @@ void GameWindow::DisplayWin()
 	Clear();
 	if(Board->IsGoalState(CellContents::Cross))
 	{
+		std::cout<<"Player ";
 		SetColour(RED, BLACK);
 		std::cout<<"X";
 		SetColour(GREY, BLACK);
@@ -269,6 +280,7 @@ void GameWindow::DisplayWin()
 	}
 	else if(Board->IsGoalState(CellContents::Nought))
 	{
+		std::cout<<"Player ";
 		SetColour(GREEN, BLACK);
 		std::cout<<"O";
 		SetColour(GREY, BLACK);
