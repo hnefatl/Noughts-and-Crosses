@@ -22,7 +22,7 @@ bool Game::Play()
 	if(!PlayerChoice.Run())
 	{
 		// They exited
-		return false;
+		return true;
 	}
 	// Store the players
 	Players.resize(2);
@@ -37,7 +37,7 @@ bool Game::Play()
 		if(!NetOptions.Run())
 		{
 			// Escaped out
-			return 0;
+			return true;
 		}
 		// Cast the Player to an online player
 		OnlinePlayer *Online=static_cast<OnlinePlayer *>(Players[1]);
@@ -51,10 +51,13 @@ bool Game::Play()
 	Players[1]->PlayerSymbol=CellContents::Nought;
 	for(unsigned int x=0; x<Players.size(); x++)
 	{
+		std::cout<<"Initialising player "<<(x+1)<<"...";
 		std::string Result=Players[x]->Initialise();
+		std::cout<<"Done."<<std::endl;
 		// If an error occurred
 		if(Result!="")
 		{
+			Clear();
 			std::cout<<"An error occurred while initialising player "<<(x+1)<<"."<<std::endl;
 			std::cout<<"The error message returned was \""<<Result<<"\"."<<std::endl;
 			std::cout<<"Press any key to exit...";
@@ -67,7 +70,7 @@ bool Game::Play()
 	GameWindow Game(Players);
 	if(!Game.Run())
 	{
-		return 1;
+		return false;
 	}
 
 	return true;

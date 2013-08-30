@@ -2,6 +2,7 @@
 
 #include <iostream>
 #include <conio.h>
+#include <thread>
 
 #include "..\ConsoleControl.h"
 
@@ -32,7 +33,13 @@ bool GameWindow::Run()
 	} while(Result==UpdateResult::urContinue);
 
 	// Show the winning screen
-	DisplayWin();
+	if(Result==UpdateResult::urEnter)
+	{
+		// Sleep for two seconds to let the player see the final board
+		std::this_thread::sleep_for(std::chrono::milliseconds(2000));
+		// Clear the screen and display the win message
+		DisplayWin();
+	}
 
 	// If the last keypress was Enter, return true. Otherwise, return false.
 	return Result==UpdateResult::urEnter;
@@ -56,12 +63,12 @@ UpdateResult GameWindow::Update()
 			// Draw
 			// Remove previous cursor
 			SetCursor(LastPosition.X, LastPosition.Y);
-			if(Board->Board[LastPosition.X][LastPosition.Y].Get()==CellContents::Cross)
+			if(Board->Board[LastPosition.Y][LastPosition.X].Get()==CellContents::Cross)
 			{
 				SetColour(RED, GREY);
 				std::cout<<"X";
 			}
-			else if(Board->Board[LastPosition.X][LastPosition.Y].Get()==CellContents::Nought)
+			else if(Board->Board[LastPosition.Y][LastPosition.X].Get()==CellContents::Nought)
 			{
 				SetColour(GREEN, GREY);
 				std::cout<<"O";
@@ -76,7 +83,7 @@ UpdateResult GameWindow::Update()
 			if(Players[CurrentPlayer]->PlayerSymbol==CellContents::Cross)
 			{
 				// Collision checking
-				if(Board->Board[Position.X][Position.Y].Get()!=CellContents::Empty)
+				if(Board->Board[Position.Y][Position.X].Get()!=CellContents::Empty)
 				{
 					SetColour(RED, RED);
 					std::cout<<"_";
@@ -90,7 +97,7 @@ UpdateResult GameWindow::Update()
 			else
 			{
 				// Collision checking
-				if(Board->Board[Position.X][Position.Y].Get()!=CellContents::Empty)
+				if(Board->Board[Position.Y][Position.X].Get()!=CellContents::Empty)
 				{
 					SetColour(RED, RED);
 					std::cout<<"_";
@@ -109,7 +116,7 @@ UpdateResult GameWindow::Update()
 			{
 			case 13: // Enter key
 				// Fill out the move data
-				if(Board->Board[Position.X][Position.Y].Get()==CellContents::Empty)
+				if(Board->Board[Position.Y][Position.X].Get()==CellContents::Empty)
 				{
 					ChosenMove->Position=Position;
 					ChosenMove->Value=Players[CurrentPlayer]->PlayerSymbol;
@@ -150,7 +157,7 @@ UpdateResult GameWindow::Update()
 		}
 	}
 	// Apply the move
-	Board->Board[ChosenMove->Position.X][ChosenMove->Position.Y].Set(ChosenMove->Value);
+	Board->Board[ChosenMove->Position.Y][ChosenMove->Position.X].Set(ChosenMove->Value);
 	Board->CalculateGoalStates();
 	// Store it as the latest move
 	// Prevent memory leaks
@@ -170,7 +177,24 @@ UpdateResult GameWindow::Update()
 		}
 	}
 
-	if(Board->IsGoalState(CellContents::Cross) || Board->IsGoalState(CellContents::Nought))
+	bool Full=true;
+	for(unsigned int y=0; y<GridSize; y++)
+	{
+		for(unsigned int x=0; x<GridSize; x++)
+		{
+			if(Board->Board[y][x].Get()==CellContents::Empty)
+			{
+				Full=false;
+				break;
+			}
+		}
+		if(!Full)
+		{
+			break;
+		}
+	}
+
+	if(Board->IsGoalState(CellContents::Cross) || Board->IsGoalState(CellContents::Nought) || Full)
 	{
 		// Signal a win
 		return UpdateResult::urEnter;
@@ -215,6 +239,8 @@ void GameWindow::Draw(bool Initial)
 			std::cout<<"O";
 		}
 	}
+
+	SetColour(GREY, BLACK);
 }
 
 void GameWindow::PrintError(std::string Error, std::string Additional)
@@ -234,19 +260,25 @@ void GameWindow::DisplayWin()
 {
 	SetColour(GREY, BLACK);
 	Clear();
-	std::cout<<"Player ";
 	if(Board->IsGoalState(CellContents::Cross))
 	{
 		SetColour(RED, BLACK);
 		std::cout<<"X";
+		SetColour(GREY, BLACK);
+		std::cout<<" has won!";
 	}
-	else
+	else if(Board->IsGoalState(CellContents::Nought))
 	{
 		SetColour(GREEN, BLACK);
 		std::cout<<"O";
+		SetColour(GREY, BLACK);
+		std::cout<<" has won!";
 	}
-	SetColour(GREY, BLACK);
-	std::cout<<" has won!"<<std::endl;
-	std::cout<<"Press any key to exit...";
+	else
+	{
+		SetColour(GREY, BLACK);
+		std::cout<<"The game resulted in a draw.";
+	}
+	std::cout<<std::endl<<"Press any key to exit...";
 	_getch();
 }

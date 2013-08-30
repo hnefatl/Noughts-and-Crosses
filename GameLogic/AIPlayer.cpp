@@ -4,6 +4,7 @@
 
 #include <vector>
 #include <ctime>
+#include <iostream>
 
 AIPlayer::AIPlayer()
 	:Player(PlayerType::AI)
@@ -21,7 +22,12 @@ std::string AIPlayer::Initialise()
 	// Seed the random generator
 	srand((unsigned int)time(NULL));
 
+	// Initialise the root node (with a blank board)
+	Root=new Node();
+	Root->State=Grid();
 
+	// Generate the decision tree
+	GenerateTree(Root, (CellContents)FirstPlayer);
 
 	// Return no error
 	return "";
@@ -31,7 +37,7 @@ std::string AIPlayer::GetMove(Move *ChosenMove)
 {
 	// Find best move (minimax algorithm)
 	// Loop through all children
-	int BestScore=0;
+	int BestScore=Root->GetChildren()[0]->Score;
 	std::vector<Node *> BestChoices;
 	for(unsigned int x=0; x<Root->GetChildren().size(); x++)
 	{
@@ -52,11 +58,8 @@ std::string AIPlayer::GetMove(Move *ChosenMove)
 			BestChoices.push_back(Root->GetChildren()[x]);
 		}
 	}
-
-	// Randomly pick a branch frm the best choices
+	// Randomly pick a branch from the best choices
 	Node *BestChoice=BestChoices[rand()%BestChoices.size()];
-	BestChoices.clear(); // Clear up the list of best choices
-
 	// Derive the move from the choice
 	for(unsigned int y=0; y<GridSize; y++)
 	{
@@ -66,14 +69,14 @@ std::string AIPlayer::GetMove(Move *ChosenMove)
 			if(Root->State.Board[y][x]!=BestChoice->State.Board[y][x])
 			{
 				// Set up the chosen move with a position to move to and a value
-				ChosenMove=new Move(Vector(x, y), BestChoice->State.Board[y][x].Get());
+				*ChosenMove=Move(Vector(x, y), BestChoice->State.Board[y][x].Get());
 				return ""; // Return no error
 			}
 		}
 	}
 
 	// Return no error
-	return "";
+	return "No move was chosen.";
 }
 
 std::string AIPlayer::InformMove(Grid *NewState)
@@ -105,16 +108,74 @@ std::string AIPlayer::InformMove(Grid *NewState)
 
 void AIPlayer::GenerateTree(Node *Current, CellContents CurrentPlayer)
 {
-	for(unsigned int y=0; y<GridSize; y++)
+	// If child nodes need to be generated - if this node is not a goal node
+	if(!(Current->State.IsGoalState(CellContents::Cross) || Current->State.IsGoalState(CellContents::Nought)))
 	{
-		for(unsigned int x=0; x<GridSize; x++)
+		// Generate all possible child states
+		for(unsigned int y=0; y<GridSize; y++)
 		{
-			// If a move could be placed here
-			if(Current->State.Board[y][x].Get()==CellContents::Empty)
+			for(unsigned int x=0; x<GridSize; x++)
 			{
-				// Create a copy of the current state
-				Grid NewBoard=Current->State;
+				// If a move could be placed here
+				if(Current->State.Board[y][x].Get()==CellContents::Empty)
+				{
+					// Create a copy of the current state
+					Grid NewBoard=Current->State;
+					// Modify it to the new possible state
+					NewBoard.Board[y][x].Set(CurrentPlayer);
+					// Set up the goal states for the board
+					NewBoard.CalculateGoalStates();
+
+					// Create a new child node
+					Node *NewChild=new Node();
+					// Set the parent
+					NewChild->SetParent(Current);
+					// Set the state
+					NewChild->State=NewBoard;
+					// Add the new node as a child
+					Current->AddChild(NewChild);
+					// Generate the states from that state, switching the current player
+					GenerateTree(NewChild, CurrentPlayer==CellContents::Cross?CellContents::Nought:CellContents::Cross);
+				}
 			}
 		}
 	}
+
+	// Calculate this node's score
+	// If this Node is a "good" node
+	if(PlayerSymbol==CurrentPlayer)
+	{
+		// If this is a win
+		if(Current->State.IsGoalState(CurrentPlayer))
+		{
+			Current->Score=1;
+		}
+		// If this is a loss
+		else if(Current->State.IsGoalState(CurrentPlayer==CellContents::Cross?CellContents::Nought:CellContents::Cross))
+		{
+			Current->Score=-1;
+		}
+	}
+	// If this node is a "bad" node
+	else
+	{
+		// If this is a win
+		if(Current->State.IsGoalState(CurrentPlayer))
+		{
+			Current->Score=-1;
+		}
+		// If this is a loss
+		else if(Current->State.IsGoalState(CurrentPlayer==CellContents::Cross?CellContents::Nought:CellContents::Cross))
+		{
+			Current->Score=1;
+		}
+	}
+
+	// Add the sum of all child scores
+	for(unsigned int x=0; x<Current->GetChildren().size(); x++)
+	{
+		Current->Score+=Current->GetChildren()[x]->Score;
+	}
+
+	// Return to calling function, backtracking up the call stack
 }

@@ -52,7 +52,9 @@ Node *Node::CloneBranch()
 	// Clone each child (if there are any)
 	for(unsigned int x=0; x<Children.size(); x++)
 	{
-		Current->AddChild(Children[x]->CloneBranch());
+		Node *Child=Children[x]->CloneBranch();
+		Child->SetParent(this);
+		Current->AddChild(Child);
 	}
 
 	return Current;
