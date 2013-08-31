@@ -6,6 +6,20 @@
 
 #include <string>
 
+class Frame
+{
+public:
+	Frame();
+	Frame(Node *Current, CellContents CurrentPlayer)
+		:Current(Current),
+		CurrentPlayer(CurrentPlayer)
+	{
+	}
+
+	Node *Current;
+	CellContents CurrentPlayer;
+};
+
 class AIPlayer
 	: public Player
 {
