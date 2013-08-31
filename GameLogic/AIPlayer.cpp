@@ -142,39 +142,49 @@ void AIPlayer::GenerateTree(Node *Current, CellContents CurrentPlayer)
 	}
 
 	// Calculate this node's score
-	// If this Node is a "good" node
-	if(PlayerSymbol==CurrentPlayer)
+	if(Current->HasChildren())
 	{
-		// If this is a win
-		if(Current->State.IsGoalState(CurrentPlayer))
+		// Maximise the value
+		if(CurrentPlayer==FirstPlayer)
 		{
-			Current->Score=1;
+			int HighestScore=Current->GetChildren()[0]->Score;
+			for(unsigned int x=0; x<Current->GetChildren().size(); x++)
+			{
+				if(Current->GetChildren()[x]->Score>HighestScore)
+				{
+					HighestScore=Current->GetChildren()[x]->Score;
+				}
+			}
+			Current->Score=HighestScore;
 		}
-		// If this is a loss
-		else if(Current->State.IsGoalState(CurrentPlayer==CellContents::Cross?CellContents::Nought:CellContents::Cross))
+		// Minimise the value
+		else
 		{
-			Current->Score=-1;
+			int LowestScore=Current->GetChildren()[0]->Score;
+			for(unsigned int x=0; x<Current->GetChildren().size(); x++)
+			{
+				if(Current->GetChildren()[x]->Score<LowestScore)
+				{
+					LowestScore=Current->GetChildren()[x]->Score;
+				}
+			}
+			Current->Score=LowestScore;
 		}
 	}
-	// If this node is a "bad" node
 	else
 	{
-		// If this is a win
-		if(Current->State.IsGoalState(CurrentPlayer))
-		{
-			Current->Score=-1;
-		}
-		// If this is a loss
-		else if(Current->State.IsGoalState(CurrentPlayer==CellContents::Cross?CellContents::Nought:CellContents::Cross))
+		if(Current->State.IsGoalState(CellContents::Cross))
 		{
 			Current->Score=1;
 		}
-	}
-
-	// Add the sum of all child scores
-	for(unsigned int x=0; x<Current->GetChildren().size(); x++)
-	{
-		Current->Score+=Current->GetChildren()[x]->Score;
+		else if(Current->State.IsGoalState(CellContents::Nought))
+		{
+			Current->Score=-1;
+		}
+		else
+		{
+			Current->Score=0;
+		}
 	}
 
 	// Return to calling function, backtracking up the call stack
