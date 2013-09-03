@@ -1,6 +1,9 @@
 #include "Server.h"
 
-#include "Networking.h"
+#include <iostream>
+
+#include <Networking.h>
+#include <NetStrings.h>
 
 Server::Server()
 	:Run(false)
@@ -15,13 +18,26 @@ bool Server::Start(std::string IP, std::string Port, unsigned int Backlog)
 	this->Backlog=Backlog;
 	Run=true;
 
-	Bind();
-	Listen();
+	std::cout<<"Binding...";
+	if(!Bind())
+	{
+		std::cout<<"Failed";
+		return false;
+	}
+	std::cout<<"Done"<<std::endl;
+	std::cout<<"Listening...";
+	if(!Listen())
+	{
+		std::cout<<"Failed";
+		return false;
+	}
+	std::cout<<"Done"<<std::endl;
 
 	while(Run)
 	{
 		// Accept a new client
 		Clients.push_back(Accept());
+		std::cout<<"Received new client."<<std::endl;
 
 		// Cull all dead clients
 		for(unsigned int x=0; x<Clients.size(); x++)
@@ -30,15 +46,22 @@ bool Server::Start(std::string IP, std::string Port, unsigned int Backlog)
 			{
 				// Remove the client
 				Clients.erase(Clients.begin()+x);
+				std::cout<<"Removed dead client."<<std::endl;
 			}
 		}
 
 		// If there are 2 or more players
 		if(Clients.size()>=2)
 		{
+			std::cout<<"Creating game."<<std::endl;
 			// Create the players
 			Client *PlayerOne=Clients[0];
 			Client *PlayerTwo=Clients[1];
+
+			// End the wait for a connected opponent on each client
+			PlayerOne->Send(ServerNotifyingConnectionString);
+			PlayerTwo->Send(ServerNotifyingConnectionString);
+
 			// Create the game
 			Game *NewGame=new Game(PlayerOne, PlayerTwo);
 			// Store the game
@@ -55,6 +78,7 @@ bool Server::Start(std::string IP, std::string Port, unsigned int Backlog)
 				if(!Games[x]->IsPlaying())
 				{
 					Games.erase(Games.begin()+x);
+					std::cout<<"Removed dead game."<<std::endl;
 				}
 			}
 		}
@@ -121,7 +145,7 @@ bool Server::Bind()
 
 bool Server::Listen()
 {
-	if(!listen(ServerSocket, Backlog))
+	if(listen(ServerSocket, Backlog)!=0)
 	{
 		return false;
 	}
@@ -143,11 +167,8 @@ Client *Server::Accept()
 			break;
 		}
 	}
-
-	if(!Net::Receive(Temp->Socket, &Temp->Username))
-	{
-		return false;
-	}
+	Temp->Online=true;
+	Temp->Start();
 
 	return Temp;
 }

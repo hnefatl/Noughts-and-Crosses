@@ -41,21 +41,45 @@ std::string AIPlayer::GetMove(Move *ChosenMove)
 	std::vector<Node *> BestChoices;
 	for(unsigned int x=0; x<Root->GetChildren().size(); x++)
 	{
-		// If a better score has been found
-		if(Root->GetChildren()[x]->Score>BestScore)
+		// Maximising
+		if(PlayerSymbol==FirstPlayer)
 		{
-			// Store the best score
-			BestScore=Root->GetChildren()[x]->Score;
-			// Empty the list of best choices
-			BestChoices.clear();
-			// Add the new best choice to the list
-			BestChoices.push_back(Root->GetChildren()[x]);
+			// If a better score has been found
+			if(Root->GetChildren()[x]->Score>BestScore)
+			{
+				// Store the best score
+				BestScore=Root->GetChildren()[x]->Score;
+				// Empty the list of best choices
+				BestChoices.clear();
+				// Add the new best choice to the list
+				BestChoices.push_back(Root->GetChildren()[x]);
+			}
+			// If a branch with the same score has been found
+			else if(Root->GetChildren()[x]->Score==BestScore)
+			{
+				// Store this branch another best choice
+				BestChoices.push_back(Root->GetChildren()[x]);
+			}
 		}
-		// If a branch with the same score has been found
-		else if(Root->GetChildren()[x]->Score==BestScore)
+		// Minimising
+		else
 		{
-			// Store this branch another best choice
-			BestChoices.push_back(Root->GetChildren()[x]);
+			// If a better score has been found
+			if(Root->GetChildren()[x]->Score<BestScore)
+			{
+				// Store the best score
+				BestScore=Root->GetChildren()[x]->Score;
+				// Empty the list of best choices
+				BestChoices.clear();
+				// Add the new best choice to the list
+				BestChoices.push_back(Root->GetChildren()[x]);
+			}
+			// If a branch with the same score has been found
+			else if(Root->GetChildren()[x]->Score==BestScore)
+			{
+				// Store this branch another best choice
+				BestChoices.push_back(Root->GetChildren()[x]);
+			}
 		}
 	}
 	// Randomly pick a branch from the best choices

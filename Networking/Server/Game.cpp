@@ -1,7 +1,11 @@
 #include "Game.h"
 
+#include <sstream>
+
 #include "NetStrings.h"
 #include "Globals.h"
+
+#include <CellContents.h>
 
 Game::Game()
 	:Playing(true)
@@ -55,8 +59,14 @@ void Game::_Play()
 	unsigned int CurrentPlayer=0;
 
 	// Prestep
-	Players[0]->Send("0"); // First player to connect goes first
-	Players[1]->Send("1"); // Second player to connect goes second
+	std::stringstream Stream;
+	std::string Buffer;
+	Stream<<CellContents::Cross;
+	Stream>>Buffer;
+	Players[0]->Send(Buffer); // First player to connect goes first
+	Stream<<CellContents::Nought;
+	Stream>>Buffer;
+	Players[1]->Send(Buffer); // Second player to connect goes second
 
 	// While the game has not been won and the board is not full
 	unsigned int CellsFilled=0;

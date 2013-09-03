@@ -3,10 +3,15 @@
 
 #include <string>
 
-extern std::string ConnectionString;
-extern std::string DisconnectionString;
+extern std::string ClientRequestingConnectionString;
+extern std::string ClientRequestingDisconnectionString;
+
+extern std::string ServerNotifyingConnectionString;
+extern std::string ServerNotifyingDisconnectionString;
+
 extern std::string TurnIndicator;
 extern std::string WinIndicator;
+
 extern std::string Error;
 
 #endif

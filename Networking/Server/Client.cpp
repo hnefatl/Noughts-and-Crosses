@@ -38,7 +38,7 @@ bool Client::Send(std::string Message)
 	// If client is no longer online
 	if(!Online)
 	{
-		// Retirn failure
+		// Return failure
 		return false;
 	}
 
@@ -58,7 +58,7 @@ bool Client::Receive(std::string *Message)
 	{
 		// Store the message
 		Received.Lock();
-		*Message=Received.back();
+		*Message=Received.front();
 		// Remove the message just used from the queue
 		Received.pop();
 		Received.Unlock();
@@ -82,7 +82,7 @@ void Client::ReceiveConstantly()
 	while(Run)
 	{
 		std::string Temp;
-		if(!Receive(&Temp))
+		if(!Net::Receive(Socket, &Temp))
 		{
 			Online=false;
 			break; // Exit the state of constant receiving
@@ -92,11 +92,7 @@ void Client::ReceiveConstantly()
 		Received.push(Temp);
 		Received.Unlock();
 
-		if(Temp==ConnectionString)
-		{
-			Online=true;
-		}
-		else if(Temp==DisconnectionString)
+		else if(Temp==ServerNotifyingDisconnectionString)
 		{
 			Online=false;
 			break; // Exit the state of constant receiving

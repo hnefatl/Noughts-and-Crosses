@@ -1,5 +1,8 @@
 #include "OnlinePlayer.h"
 
+#include <NetStrings.h>
+#include <sstream>
+
 OnlinePlayer::OnlinePlayer()
 	:Player(PlayerType::Online)
 {
@@ -19,10 +22,29 @@ void OnlinePlayer::SetData(std::string IP, std::string Port)
 std::string OnlinePlayer::Initialise()
 {
 	// Connect to the server
-	if(!Client::Connect(IP, Port))
+	if(!Connect(IP, Port))
 	{
 		return "Failed to connect to the server.";
 	}
+
+	// Receive string, effectively waiting for other player to connect
+	std::string Message;
+	Receive(&Message);
+
+	// If the message isn't that a client has connected
+	if(Message!=ServerNotifyingConnectionString)
+	{
+		// Return an error
+		return "Failed to connect to the opponent.";
+	}
+
+	// Receive the players turn number
+	Receive(&Message);
+	std::stringstream Stream;
+	Stream<<Message;
+	unsigned int PlayerNumber;
+	Stream>>PlayerNumber;
+	PlayerSymbol=(CellContents)PlayerNumber;
 
 	return "";
 }
@@ -30,7 +52,10 @@ std::string OnlinePlayer::Initialise()
 std::string OnlinePlayer::GetMove(Move *ChosenMove)
 {
 	std::string Message;
-	Receive(&Message);
+	if(!Receive(&Message))
+	{
+		return "Opponent disconnected.";
+	}
 
 	// Convert our received string to a move
 	if(!Move::Parse(&Message, ChosenMove))

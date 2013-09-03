@@ -41,7 +41,7 @@
   </ImportGroup>
   <PropertyGroup Label="UserMacros" />
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
-    <IncludePath>E:\Programming\C++\AI\XO\Networking\Client;E:\Programming\C++\AI\XO\GameData;E:\Programming\C++\AI\XO\UI;E:\Programming\C++\AI\XO\Globals;E:\Programming\C++\AI\XO\DecisionTree;$(IncludePath)</IncludePath>
+    <IncludePath>E:\Programming\C++\AI\XO\Networking\Client;E:\Programming\C++\AI\XO\GameData;E:\Programming\C++\AI\XO\Networking\NetGlobals;E:\Programming\C++\AI\XO\UI;E:\Programming\C++\AI\XO\Globals;E:\Programming\C++\AI\XO\DecisionTree;$(IncludePath)</IncludePath>
     <LibraryPath>E:\Programming\C++\AI\XO\Lib;$(LibraryPath)</LibraryPath>
     <OutDir>../Lib/</OutDir>
   </PropertyGroup>
