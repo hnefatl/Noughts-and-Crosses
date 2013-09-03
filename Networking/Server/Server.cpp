@@ -59,8 +59,14 @@ bool Server::Start(std::string IP, std::string Port, unsigned int Backlog)
 			Client *PlayerTwo=Clients[1];
 
 			// End the wait for a connected opponent on each client
-			PlayerOne->Send(ServerNotifyingConnectionString);
-			PlayerTwo->Send(ServerNotifyingConnectionString);
+			if(!PlayerOne->Send(ServerNotifyingConnectionString))
+			{
+				PlayerTwo->Send(Error);
+			}
+			if(!PlayerTwo->Send(ServerNotifyingConnectionString))
+			{
+				PlayerOne->Send(Error);
+			}
 
 			// Create the game
 			Game *NewGame=new Game(PlayerOne, PlayerTwo);

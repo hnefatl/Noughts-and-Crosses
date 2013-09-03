@@ -11,7 +11,7 @@ class NetworkOptions
 public:
 	NetworkOptions();
 
-	// virtual bool Run();     // Default implementation suffices
+	virtual bool Run();
 
 	std::string IP, Port;
 protected:

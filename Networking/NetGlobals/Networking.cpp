@@ -11,8 +11,9 @@ bool Net::Send(SOCKET Target, std::string Message)
 	// Convert the length of the message to a string
 	Converter<<Message.size();
 	Converter>>MessageSize;
+	Converter.clear();
 	// Convert the length of the string representation of the message to a string
-	Converter<<MessageSize;
+	Converter<<MessageSize.size();
 	Converter>>MessageSizeSize;
 
 	// Send the size of the message size
@@ -73,7 +74,8 @@ bool Net::Receive(SOCKET Target, std::string *Buffer)
 	// Convert the string to an int
 	Converter<<Temp;
 	Converter>>MessageSizeSize;
-	Temp="";
+	Converter.clear();
+	Temp.clear();
 	
 	// Receive however many bytes constitute the length of the message
 	if(!ReceivePlain(Target, &Temp, MessageSizeSize))
@@ -106,14 +108,17 @@ bool Net::ReceivePlain(SOCKET Target, std::string *Buffer, unsigned int Length)
 	// While there is more data to recieve
 	while(BytesReceived!=Length)
 	{
-		std::string Temp; // Variable to hold the data received this time
+		char Temp[256]; // Variable to hold the data received this time
 		// Receive the data, store how many bytes were received
-		int Received=recv(Target, &Temp[0], Length-BytesReceived, NULL);
-		if(Received<0)
+		// Receive x bytes - if Length-BytesReceived is over 255, just receive 255, otherwise receive a full 255
+		int Received=recv(Target, Temp, Length-BytesReceived>255?255:Length-BytesReceived, NULL);
+		if(Received<=0)
 		{
 			// Network error
 			return false;
 		}
+		// NULL delimiter
+		Temp[Received]='\0';
 		// Add the number of bytes received this time to the number of bytes received in total
 		BytesReceived+=(unsigned int)Received;
 		// Append the newly acquired message to the full message

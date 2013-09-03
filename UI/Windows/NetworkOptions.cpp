@@ -13,6 +13,19 @@ NetworkOptions::NetworkOptions()
 	PortText="Server port: ";
 }
 
+bool NetworkOptions::Run()
+{
+#ifdef _DEBUG
+	// Debug mode - use the local computer IP and port 34652
+	IP="127.0.0.1";
+	Port="34652";
+
+	return true;
+#else
+	return Window::Run(); // Run the window like normal
+#endif
+}
+
 UpdateResult NetworkOptions::Update()
 {
 	int KeyPressed=_getch();

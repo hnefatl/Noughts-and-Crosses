@@ -4,6 +4,7 @@
 #include "Globals.h"
 #include <vector>
 #include <string>
+#include <sstream>
 
 Move::Move()
 	:Value(CellContents::Empty)
@@ -29,9 +30,17 @@ bool Move::Parse(std::string *From, Move *To)
 	Move *ChosenMove=new Move();
 	try
 	{
-		ChosenMove->Position.X=atoi(Segments[0].c_str());
-		ChosenMove->Position.Y=atoi(Segments[1].c_str());
-		ChosenMove->Value=(CellContents)atoi(Segments[2].c_str());
+		std::stringstream Stream;
+		Stream<<Segments[0];
+		Stream>>ChosenMove->Position.X;
+		Stream.clear();
+		Stream<<Segments[1];
+		Stream>>ChosenMove->Position.Y;
+		Stream.clear();
+		int Temp;
+		Stream<<Segments[2];
+		Stream>>Temp;
+		ChosenMove->Value=(CellContents)Temp;
 	}
 	catch(...)
 	{
@@ -44,11 +53,11 @@ bool Move::Parse(std::string *From, Move *To)
 }
 bool Move::GetString(Move *From, std::string *To)
 {
-	(*To)+=From->Position.X;
+	(*To)+=(char)((int)From->Position.X);
 	(*To)+=':';
-	(*To)+=From->Position.Y;
+	(*To)+=(char)((int)From->Position.Y);
 	(*To)+=':';
-	(*To)+=(char)From->Value;
+	(*To)+=(char)((int)From->Value);
 
 	return true;
 }

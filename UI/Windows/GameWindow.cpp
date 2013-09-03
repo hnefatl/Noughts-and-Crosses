@@ -176,15 +176,16 @@ UpdateResult GameWindow::Update()
 		delete LatestMove;
 	}
 	LatestMove=ChosenMove;
+
 	// Inform all players of the move
 	for(unsigned int x=0; x<Players.size(); x++)
 	{
-		Result=Players[x]->InformMove(Board);
-		if(Result!="")
-		{
-			PrintError(Result, "The player being informed was "+x);
-			return UpdateResult::urEscape;
-		}
+			Result=Players[x]->InformMove(Board);
+			if(Result!="")
+			{
+				PrintError(Result, "The player being informed was "+x);
+				return UpdateResult::urEscape;
+			}
 	}
 
 	bool Full=true;

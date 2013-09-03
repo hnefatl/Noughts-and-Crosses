@@ -27,7 +27,7 @@ std::string OnlinePlayer::Initialise()
 		return "Failed to connect to the server.";
 	}
 
-	// Receive string, effectively waiting for other player to connect
+	// Wait for other player to connect
 	std::string Message;
 	Receive(&Message);
 
@@ -38,8 +38,11 @@ std::string OnlinePlayer::Initialise()
 		return "Failed to connect to the opponent.";
 	}
 
-	// Receive the players turn number
-	Receive(&Message);
+	// Receive the turn number
+	if(!Receive(&Message))
+	{
+		return "Opponent disconnected.";
+	}
 	std::stringstream Stream;
 	Stream<<Message;
 	unsigned int PlayerNumber;

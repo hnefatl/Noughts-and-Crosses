@@ -6,6 +6,8 @@
 #include "Globals.h"
 
 #include <CellContents.h>
+#include <Grid.h>
+#include <Move.h>
 
 Game::Game()
 	:Playing(true)
@@ -37,7 +39,7 @@ void Game::_Play()
 	/*
 	The structure of the game is thus:
 	Pre-step. Initialise each Client, sending them a 0 or a 1 to symbolise whether they are an X or a O
-	
+
 	1. Send a message to PlayerOne informing it that it is its go.
 	2. Receive a message from PlayerOne informing the server of the move taken.
 	3. Send a message to PlayerOne and PlayerTwo informing them of the move taken
@@ -61,21 +63,40 @@ void Game::_Play()
 	// Prestep
 	std::stringstream Stream;
 	std::string Buffer;
-	Stream<<CellContents::Cross;
-	Stream>>Buffer;
-	Players[0]->Send(Buffer); // First player to connect goes first
 	Stream<<CellContents::Nought;
 	Stream>>Buffer;
-	Players[1]->Send(Buffer); // Second player to connect goes second
+	Stream.clear();
+	Buffer.clear();
+	if(!Players[0]->Send(Buffer)) // First player to connect goes first (remote player has symbol sent)
+	{
+		Players[1]->Send(Error);
+		Playing=false;
+		return;
+	}
+	Stream<<CellContents::Cross;
+	Stream>>Buffer;
+	if(!Players[1]->Send(Buffer)) // Second player to connect goes second (remote player has symbol sent)
+	{
+		Players[0]->Send(Error);
+		Playing=false;
+		return;
+	}
 
 	// While the game has not been won and the board is not full
 	unsigned int CellsFilled=0;
 	while((!Board.IsGoalState(CellContents::Cross) && !Board.IsGoalState(CellContents::Nought)) && CellsFilled!=GridSize*GridSize)
 	{
-		Players[CurrentPlayer]->Send(TurnIndicator);
 		std::string BoardState;
-		Players[CurrentPlayer]->Receive(&BoardState);
-		// Parse the new board state
+		if(!Players[CurrentPlayer]->Receive(&BoardState))
+		{
+			Players[CurrentPlayer==0?1:0]->Send(Error);
+			Playing=false;
+			return;
+		}
+		// Copy the board
+		Grid OldBoard=Board;
+
+		// Parse the new board state, updating the server's version of the board
 		if(!Grid::Parse(&BoardState, &Board))
 		{
 			// Failed to parse new board state - send the error message
@@ -87,20 +108,43 @@ void Game::_Play()
 			return;
 		}
 
-		// Inform all players of the new board state
-		std::string NewBoardState;
-		Grid::GetString(&Board, &NewBoardState);
+		// Isolate the move from the grid
+		Move NewMove;
+		for(unsigned int y=0; y<GridSize; y++)
+		{
+			for(unsigned int x=0; x<GridSize; x++)
+			{
+				if(Board.Board[y][x]!=OldBoard.Board[y][x])
+				{
+					// Mismatch detected
+					NewMove.Position=Vector(x, y);
+					NewMove.Value=Board.Board[y][x].Get();
+				}
+			}
+		}
+		// Convert the move to a string
+		std::string SendableMove;
+		Move::GetString(&NewMove, &SendableMove);
+
+		// Inform all players of the new move
 		for(unsigned int x=0; x<Players.size(); x++)
 		{
-			Players[x]->Send(NewBoardState);
+			if(!Players[x]->Send(SendableMove))
+			{
+				Players[x==0?1:0]->Send(Error);
+				Playing=false;
+				return;
+			}
 		}
 
 		// Swap players
 		CurrentPlayer==0?CurrentPlayer==1:CurrentPlayer=0;
 	}
 
-	// The game has now been won or drawn - each player also has the winning board state stored locally, so they can
+	// The game has now been won or drawn - each player also has the final board state stored locally, so they can
 	// work out who won too.
+	// There's nothing left to do but end the game
+	Playing=false;
 }
 
 bool Game::IsPlaying()

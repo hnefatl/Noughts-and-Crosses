@@ -87,15 +87,14 @@ void Client::ReceiveConstantly()
 			Online=false;
 			break; // Exit the state of constant receiving
 		}
-
-		Received.Lock();
-		Received.push(Temp);
-		Received.Unlock();
-
-		else if(Temp==ServerNotifyingDisconnectionString)
+		if(Temp==ServerNotifyingDisconnectionString)
 		{
 			Online=false;
 			break; // Exit the state of constant receiving
 		}
+
+		Received.Lock();
+		Received.push(Temp);
+		Received.Unlock();
 	}
 }

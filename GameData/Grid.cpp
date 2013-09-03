@@ -107,8 +107,23 @@ bool Grid::Parse(std::string *Board, Grid *Buffer)
 	{
 		for(unsigned int x=0; x<GridSize; x++)
 		{
-			// Convert the character at the specified position to a CellContents, and set it
-			Buffer->Board[y][x].Set((CellContents)((*Board)[(y*GridSize)+x]));
+			char Symbol=(*Board)[(y*GridSize)+x];
+			if(Symbol=='X')
+			{
+				Buffer->Board[y][x].Set(CellContents::Cross);
+			}
+			else if(Symbol=='O')
+			{
+				Buffer->Board[y][x].Set(CellContents::Nought);
+			}
+			else if(Symbol=='_')
+			{
+				Buffer->Board[y][x].Set(CellContents::Empty);
+			}
+			else
+			{
+				return false;
+			}
 		}
 	}
 
@@ -116,14 +131,33 @@ bool Grid::Parse(std::string *Board, Grid *Buffer)
 }
 bool Grid::GetString(Grid *Board, std::string *Buffer)
 {
-	Buffer->clear();
+	std::string Local;
 	for(unsigned int y=0; y<GridSize; y++)
 	{
 		for(unsigned int x=0; x<GridSize; x++)
 		{
-			(*Buffer)+=((char)(Board->Board[y][x].Get()));
+			CellContents Current=Board->Board[y][x].Get();
+			if(Current==CellContents::Cross)
+			{
+				Local+='X';
+			}
+			else if(Current==CellContents::Nought)
+			{
+				Local+='O';
+			}
+			else if(Current==CellContents::Empty)
+			{
+				Local+='_';
+			}
+			else
+			{
+				return false;
+			}
 		}
 	}
+
+	// Swap strings
+	*Buffer=Local;
 
 	return true;
 }

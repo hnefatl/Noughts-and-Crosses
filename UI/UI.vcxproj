@@ -45,6 +45,7 @@
     <LinkIncremental>true</LinkIncremental>
     <IncludePath>E:\Programming\C++\AI\XO\Networking\NetGlobals;E:\Programming\C++\AI\XO\Networking\Server;E:\Programming\C++\AI\XO\Networking\Client;E:\Programming\C++\AI\XO\Globals;E:\Programming\C++\AI\XO\GameLogic;E:\Programming\C++\AI\XO\GameData;E:\Programming\C++\AI\XO\DecisionTree;$(IncludePath)</IncludePath>
     <LibraryPath>E:\Programming\C++\AI\XO\Lib;$(LibraryPath)</LibraryPath>
+    <TargetName>XO</TargetName>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <LinkIncremental>false</LinkIncremental>
