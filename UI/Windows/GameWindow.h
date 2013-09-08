@@ -35,7 +35,7 @@ protected:
 	std::vector<Player *> Players;
 	unsigned int CurrentPlayer;
 
-	Move *LatestMove;
+	Move LatestMove;
 };
 
 #endif

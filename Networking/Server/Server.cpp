@@ -47,6 +47,7 @@ bool Server::Start(std::string IP, std::string Port, unsigned int Backlog)
 				// Remove the client
 				Clients.erase(Clients.begin()+x);
 				std::cout<<"Removed dead client."<<std::endl;
+				x--; // Reduce x to account for client just removed
 			}
 		}
 

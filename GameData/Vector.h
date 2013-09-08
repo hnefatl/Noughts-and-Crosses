@@ -7,6 +7,8 @@ public:
 	Vector();
 	Vector(unsigned int X, unsigned int Y);
 
+	bool operator ==(const Vector &One) const;
+
 	unsigned int X, Y;
 };
 

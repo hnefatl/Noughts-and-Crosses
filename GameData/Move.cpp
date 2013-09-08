@@ -27,20 +27,20 @@ bool Move::Parse(std::string *From, Move *To)
 	}
 
 	// Run the conversions
-	Move *ChosenMove=new Move();
+	Move ChosenMove;
 	try
 	{
 		std::stringstream Stream;
 		Stream<<Segments[0];
-		Stream>>ChosenMove->Position.X;
+		Stream>>ChosenMove.Position.X;
 		Stream.clear();
 		Stream<<Segments[1];
-		Stream>>ChosenMove->Position.Y;
+		Stream>>ChosenMove.Position.Y;
 		Stream.clear();
 		int Temp;
 		Stream<<Segments[2];
 		Stream>>Temp;
-		ChosenMove->Value=(CellContents)Temp;
+		ChosenMove.Value=(CellContents)Temp;
 	}
 	catch(...)
 	{
@@ -48,16 +48,22 @@ bool Move::Parse(std::string *From, Move *To)
 	}
 
 	// Store our result
-	To=ChosenMove;
+	*To=ChosenMove;
 	return true;
 }
 bool Move::GetString(Move *From, std::string *To)
 {
-	(*To)+=(char)((int)From->Position.X);
-	(*To)+=':';
-	(*To)+=(char)((int)From->Position.Y);
-	(*To)+=':';
-	(*To)+=(char)((int)From->Value);
+	std::stringstream Stream;
+	Stream<<From->Position.X<<":";
+	Stream<<From->Position.Y<<":";
+	Stream<<(int)From->Value;
+
+	Stream>>*To;
 
 	return true;
+}
+
+bool Move::operator ==(const Move &One) const
+{
+	return (this->Position==One.Position) && (this->Value==One.Value);
 }

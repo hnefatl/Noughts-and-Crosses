@@ -126,15 +126,12 @@ void Game::_Play()
 		std::string SendableMove;
 		Move::GetString(&NewMove, &SendableMove);
 
-		// Inform all players of the new move
-		for(unsigned int x=0; x<Players.size(); x++)
+		// Inform the other player of the move
+		if(!Players[CurrentPlayer==0?1:0]->Send(SendableMove))
 		{
-			if(!Players[x]->Send(SendableMove))
-			{
-				Players[x==0?1:0]->Send(Error);
-				Playing=false;
-				return;
-			}
+			Players[CurrentPlayer==0?1:0]->Send(Error);
+			Playing=false;
+			return;
 		}
 
 		// Swap players

@@ -15,6 +15,8 @@ public:
 	static bool Parse(std::string *From, Move *To);
 	static bool GetString(Move *From, std::string *To);
 
+	bool operator ==(const Move &One) const;
+
 	Vector Position;
 	CellContents Value;
 };

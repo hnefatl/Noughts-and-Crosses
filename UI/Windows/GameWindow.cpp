@@ -8,8 +8,7 @@
 
 GameWindow::GameWindow(std::vector<Player *> Players)
 	:CurrentPlayer(FirstPlayer),
-	Board(new Grid()),
-	LatestMove(NULL)
+	Board(new Grid())
 {
 	this->Players=Players;
 }
@@ -59,7 +58,7 @@ UpdateResult GameWindow::Update()
 {
 	std::string Result;
 	// Let the current player choose the move
-	Move *ChosenMove=new Move();
+	Move ChosenMove;
 
 	// Manually update a human player
 	if(Players[CurrentPlayer]->Type==PlayerType::Human)
@@ -68,7 +67,7 @@ UpdateResult GameWindow::Update()
 		Vector LastPosition=Vector(GridSize/2, GridSize/2);
 		Vector Position=LastPosition;
 		// While not chosen
-		while(ChosenMove->Value==CellContents::Empty)
+		while(ChosenMove.Value==CellContents::Empty)
 		{
 			// Draw
 			// Remove previous cursor
@@ -128,8 +127,8 @@ UpdateResult GameWindow::Update()
 				// Fill out the move data
 				if(Board->Board[Position.Y][Position.X].Get()==CellContents::Empty)
 				{
-					ChosenMove->Position=Position;
-					ChosenMove->Value=Players[CurrentPlayer]->PlayerSymbol;
+					ChosenMove.Position=Position;
+					ChosenMove.Value=Players[CurrentPlayer]->PlayerSymbol;
 				}
 				break;
 			case 224: // Special key
@@ -159,7 +158,7 @@ UpdateResult GameWindow::Update()
 	// Automatically update non-human players
 	else
 	{
-		Result=Players[CurrentPlayer]->GetMove(ChosenMove);
+		Result=Players[CurrentPlayer]->GetMove(&ChosenMove);
 		if(Result!="")
 		{
 			PrintError(Result);
@@ -167,25 +166,24 @@ UpdateResult GameWindow::Update()
 		}
 	}
 	// Apply the move
-	Board->Board[ChosenMove->Position.Y][ChosenMove->Position.X].Set(ChosenMove->Value);
+	Board->Board[ChosenMove.Position.Y][ChosenMove.Position.X].Set(ChosenMove.Value);
 	Board->CalculateGoalStates();
 	// Store it as the latest move
-	// Prevent memory leaks
-	if(LatestMove!=NULL)
-	{
-		delete LatestMove;
-	}
 	LatestMove=ChosenMove;
 
 	// Inform all players of the move
 	for(unsigned int x=0; x<Players.size(); x++)
 	{
+		// Disbar the one case the player shouldn't be informed in - when the current player is online, but the player to be informed is
+		if(!(Players[CurrentPlayer]->Type==PlayerType::Online && Players[x]->Type==PlayerType::Online))
+		{
 			Result=Players[x]->InformMove(Board);
 			if(Result!="")
 			{
 				PrintError(Result, "The player being informed was "+x);
 				return UpdateResult::urEscape;
 			}
+		}
 	}
 
 	bool Full=true;
@@ -240,7 +238,7 @@ void GameWindow::Draw(bool Initial)
 			SetColour(GREEN, GREY);
 		}
 
-		SetCursor(LatestMove->Position.X, LatestMove->Position.Y);
+		SetCursor(LatestMove.Position.X, LatestMove.Position.Y);
 		if(Players[CurrentPlayer]->PlayerSymbol==CellContents::Cross)
 		{
 			std::cout<<"X";
