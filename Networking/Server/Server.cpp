@@ -40,9 +40,9 @@ bool Server::Start(std::string IP, std::string Port, unsigned int Backlog)
 		std::cout<<"Received new client."<<std::endl;
 
 		// Cull all dead clients
-		for(unsigned int x=0; x<Clients.size(); x++)
+		for(int x=0; x<(int)Clients.size(); x++)
 		{
-			if(!Clients[x]->Online)
+			if(!Clients[(unsigned int)x]->Online)
 			{
 				// Remove the client
 				Clients.erase(Clients.begin()+x);
@@ -79,10 +79,10 @@ bool Server::Start(std::string IP, std::string Port, unsigned int Backlog)
 			NewGame->Play();
 
 			// Cull all dead games
-			for(unsigned int x=0; x<Games.size(); x++)
+			for(int x=0; x<(int)Games.size(); x++)
 			{
 				// Finished playing
-				if(!Games[x]->IsPlaying())
+				if(!Games[(unsigned int)x]->IsPlaying())
 				{
 					Games.erase(Games.begin()+x);
 					std::cout<<"Removed dead game."<<std::endl;

@@ -135,7 +135,7 @@ void Game::_Play()
 		}
 
 		// Swap players
-		CurrentPlayer==0?CurrentPlayer==1:CurrentPlayer=0;
+		CurrentPlayer==0?CurrentPlayer=1:CurrentPlayer=0;
 	}
 
 	// The game has now been won or drawn - each player also has the final board state stored locally, so they can
