@@ -24,6 +24,8 @@ public:
 
 	Client *Accept();
 
+	std::vector<std::string> *GetLocalAddresses();
+
 private:
 	SOCKET ServerSocket;
 
@@ -33,6 +35,8 @@ private:
 	std::string IP, Port;
 	unsigned int Backlog;
 	bool Run;
+
+	bool WSASetup;
 };
 
 #endif

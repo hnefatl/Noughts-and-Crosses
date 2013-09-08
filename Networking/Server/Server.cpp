@@ -6,13 +6,23 @@
 #include <NetStrings.h>
 
 Server::Server()
-	:Run(false)
+	:Run(false),
+	WSASetup(false)
 {
-
 }
 
 bool Server::Start(std::string IP, std::string Port, unsigned int Backlog)
 {
+	if(!WSASetup)
+	{
+		WSAData Data;
+		if(WSAStartup(MAKEWORD(1, 1), &Data)!=0)
+		{
+			return false;
+		}
+		WSASetup=true;
+	}
+
 	this->IP=IP;
 	this->Port=Port;
 	this->Backlog=Backlog;
@@ -96,13 +106,6 @@ bool Server::Start(std::string IP, std::string Port, unsigned int Backlog)
 
 bool Server::Bind()
 {
-	WSAData Data;
-
-	if(WSAStartup(MAKEWORD(1, 1), &Data)!=0)
-	{
-		return false;
-	}
-
 	addrinfo Hints, *ServerInfo;
 
 	memset(&Hints, 0, sizeof(Hints));
@@ -158,6 +161,43 @@ bool Server::Listen()
 	}
 
 	return true;
+}
+
+std::vector<std::string> *Server::GetLocalAddresses()
+{
+	if(!WSASetup)
+	{
+		WSAData Data;
+		if(WSAStartup(MAKEWORD(1, 1), &Data)!=0)
+		{
+			return false;
+		}
+		WSASetup=true;
+	}
+
+	std::vector<std::string> *Results=new std::vector<std::string>;
+	char HostName[INET6_ADDRSTRLEN];
+	if(gethostname(HostName, sizeof(HostName))<0)
+	{
+		return NULL;
+	}
+
+	hostent *HostLookup=gethostbyname(HostName);
+	if(HostLookup==NULL)
+	{
+		return NULL;
+	}
+
+	unsigned int x=0;
+	while(HostLookup->h_addr_list[x]!=NULL)
+	{
+		in_addr Address;
+		memcpy(&Address, HostLookup->h_addr_list[x], sizeof(Address));
+		Results->push_back(std::string(inet_ntoa(Address)));
+		x++;
+	}
+
+	return Results;
 }
 
 Client *Server::Accept()
